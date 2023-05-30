@@ -1,0 +1,42 @@
+{
+    "name": "maliboot/auth",
+    "description": "A auth library for Maliboot.",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "swoole",
+        "hyperf",
+        "Maliboot",
+        "auth"
+    ],
+    "support": {
+    },
+    "require": {
+        "php": ">=8.0",
+        "96qbhy/simple-jwt": "^v1.4.0",
+        "hyperf/cache": "^3.0",
+        "hyperf/di": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MaliBoot\\Auth\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MaliBootTest\\Auth\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hyperf": {
+            "config": "MaliBoot\\Auth\\ConfigProvider"
+        }
+    }
+}

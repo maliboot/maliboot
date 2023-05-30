@@ -1,0 +1,39 @@
+{
+    "name": "maliboot/di",
+    "description": "A DI library for Maliboot.",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "swoole",
+        "hyperf",
+        "Maliboot",
+        "di"
+    ],
+    "support": {
+    },
+    "require": {
+        "php": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MaliBoot\\Di\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MaliBootTest\\Di\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hyperf": {
+            "config": "MaliBoot\\Di\\ConfigProvider"
+        }
+    }
+}

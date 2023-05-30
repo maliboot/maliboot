@@ -1,0 +1,39 @@
+{
+    "name": "maliboot/exception-handler",
+    "description": "A exception handler library for Maliboot.",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "swoole",
+        "hyperf",
+        "Maliboot",
+        "exception"
+    ],
+    "support": {
+    },
+    "require": {
+        "php": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MaliBoot\\ExceptionHandler\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MaliBootTest\\ExceptionHandler\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hyperf": {
+            "config": "MaliBoot\\ExceptionHandler\\ConfigProvider"
+        }
+    }
+}

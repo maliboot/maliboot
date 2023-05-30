@@ -1,0 +1,40 @@
+{
+    "name": "maliboot/cola",
+    "description": "A COLA library for Hyperf.",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "swoole",
+        "hyperf",
+        "COLA"
+    ],
+    "support": {
+    },
+    "require": {
+        "php": ">=8.0",
+        "maliboot/di": "*",
+        "maliboot/dto": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "MaliBoot\\Cola\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MaliBootTest\\Cola\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hyperf": {
+            "config": "MaliBoot\\Cola\\ConfigProvider"
+        }
+    }
+}
