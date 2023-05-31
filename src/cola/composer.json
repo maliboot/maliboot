@@ -1,12 +1,13 @@
 {
     "name": "maliboot/cola",
-    "description": "A COLA library for Hyperf.",
+    "description": "A COLA library for Maliboot.",
     "license": "MIT",
     "keywords": [
         "php",
         "swoole",
         "hyperf",
-        "COLA"
+        "COLA",
+        "maliboot"
     ],
     "support": {
     },

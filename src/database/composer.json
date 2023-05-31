@@ -1,12 +1,13 @@
 {
     "name": "maliboot/database",
-    "description": "A plugin for MaliBoot.",
+    "description": "A database for MaliBoot.",
     "license": "MIT",
     "keywords": [
         "php",
         "swoole",
         "hyperf",
-        "plugin"
+        "plugin",
+        "maliboot"
     ],
     "support": {
     },

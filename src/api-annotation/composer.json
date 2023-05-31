@@ -1,12 +1,12 @@
 {
     "name": "maliboot/api-annotation",
-    "description": "A swagger library for Hyperf.",
+    "description": "A api-annotation library for Maliboot.",
     "license": "MIT",
     "keywords": [
         "php",
         "swoole",
         "hyperf",
-        "swagger"
+        "maliboot"
     ],
     "support": {
     },

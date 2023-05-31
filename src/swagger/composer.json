@@ -1,6 +1,6 @@
 {
     "name": "maliboot/swagger",
-    "description": "A swagger library for Hyperf.",
+    "description": "A swagger library for Maliboot.",
     "license": "MIT",
     "keywords": [
         "php",

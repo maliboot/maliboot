@@ -1,12 +1,13 @@
 {
     "name": "maliboot/plugin-config",
-    "description": "A plugin config library for Hyperf.",
+    "description": "A plugin config library for Maliboot.",
     "license": "MIT",
     "keywords": [
         "php",
         "swoole",
         "hyperf",
-        "config"
+        "config",
+        "maliboot"
     ],
     "support": {
     },

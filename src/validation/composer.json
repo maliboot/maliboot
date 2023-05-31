@@ -1,12 +1,13 @@
 {
     "name": "maliboot/validation",
-    "description": "A validation library for Hyperf.",
+    "description": "A validation library for Maliboot.",
     "license": "MIT",
     "keywords": [
         "php",
         "swoole",
         "hyperf",
-        "validation"
+        "validation",
+        "maliboot"
     ],
     "support": {
     },

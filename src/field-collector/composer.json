@@ -1,12 +1,13 @@
 {
     "name": "maliboot/field-collector",
-    "description": "A plugin for MaliBoot.",
+    "description": "A field-collector for MaliBoot.",
     "license": "MIT",
     "keywords": [
         "php",
         "swoole",
         "hyperf",
-        "plugin"
+        "plugin",
+        "maliboot"
     ],
     "support": {
     },
