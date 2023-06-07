@@ -57,7 +57,7 @@ class ResponseWrapper implements ResponseWrapperInterface
         return $response instanceof PageVO
             || $response instanceof AbstractViewObject
             || ($response instanceof Collection && $response[0] instanceof AbstractViewObject)
-            || (is_array($response) && $response[0] instanceof AbstractViewObject)
+            || (is_array($response) && isset($response[0]) && $response[0] instanceof AbstractViewObject)
             || ($response instanceof Arrayable && $response[0] instanceof AbstractViewObject)
             || ($response instanceof \MaliBoot\Utils\Contract\Arrayable && $response[0] instanceof AbstractViewObject);
     }
