@@ -29,17 +29,15 @@ abstract class AbstractExceptionHandler extends ExceptionHandler
 
     protected function formatError(\Throwable $throwable): array
     {
-        $errCode = $throwable->getCode() !== 0 ? $throwable->getCode() : ServerErrorCode::SERVER_ERROR;
-        if (! ErrorCodeCollector::hasCode($errCode)) {
+        $errCode = $throwable->getCode();
+        $errMessage = $throwable->getMessage();
+        if ($errCode === 0 || ! ErrorCodeCollector::hasCode($errCode)) {
             $errCode = ServerErrorCode::SERVER_ERROR;
-        }
-
-        if (empty($errMessage = $throwable->getMessage())) {
             $errMessage = ErrorCodeCollector::getMessage($errCode);
         }
 
         if ($this->config->get('app_debug')) {
-            $errMessage = sprintf('%s[%s] in %s', $errMessage, $throwable->getLine(), $throwable->getFile());
+            $errMessage = sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile());
         }
 
         return [$errCode, $errMessage];
