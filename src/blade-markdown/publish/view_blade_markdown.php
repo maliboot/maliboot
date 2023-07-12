@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use MaliBoot\BladeMarkdown\Contract\MarkdownRenderInterface;
+
 return [
     'code_highlighting' => [
         /*
@@ -50,7 +52,7 @@ return [
      *
      * More info: https://spatie.be/docs/laravel-markdown/v1/advanced-usage/customizing-the-rendering-process
      */
-    'renderer_class' => \EMaoModule\Message\Infra\Common\View\MarkdownRenderInterface::class,
+    'renderer_class' => MarkdownRenderInterface::class,
 
     /*
      * These extensions should be added to the markdown environment. A valid
