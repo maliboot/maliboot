@@ -8,6 +8,18 @@
 ### 依赖
 * `hyperf/view-engine:^3.0`
 * `patie/laravel-markdown:^2.3`
+* `hyperf/view-engine`配置为blade模板，如
+```
+// config/autoload/view.php
+return [
+    'engine' => Hyperf\ViewEngine\HyperfViewEngine::class,
+    'mode' => Mode::SYNC,
+    'config' => [
+        'view_path' => BASE_PATH . '/storage/view/',
+        'cache_path' => BASE_PATH . '/runtime/view/',
+    ],
+];
+```
 
 ### 安装
 安装组件包
