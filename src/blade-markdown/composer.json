@@ -1,0 +1,42 @@
+{
+    "name": "maliboot/blade-markdown",
+    "description": "A error code library for Maliboot.",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "swoole",
+        "hyperf",
+        "Maliboot",
+        "markdown",
+        "blade"
+    ],
+    "support": {
+    },
+    "require": {
+        "php": ">=8.0",
+        "hyperf/view-engine": "^3.0",
+        "spatie/laravel-markdown": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MaliBoot\\BladeMarkdown\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MaliBootTest\\BladeMarkdown\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hyperf": {
+            "config": "MaliBoot\\BladeMarkdown\\ConfigProvider"
+        }
+    }
+}
