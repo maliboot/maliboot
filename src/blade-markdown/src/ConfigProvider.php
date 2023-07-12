@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace MaliBoot\BladeMarkdown;
 
+use MaliBoot\BladeMarkdown\Contract\MarkdownRenderInterface;
+
 class ConfigProvider
 {
     public function __invoke(): array
     {
         return [
             'dependencies' => [
+                MarkdownRenderInterface::class => MarkdownFactory::class,
             ],
             'aspects' => [
             ],
