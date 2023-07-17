@@ -22,4 +22,8 @@ class ServerErrorCode extends AbstractErrorCode
     #[StatusCode(500)]
     #[Message('查询条件参数错误')]
     public const WHERE_INVALID_PARAMS = 100003;
+
+    #[StatusCode(401)]
+    #[Message('token过期')]
+    public const AUTH_SESSION_EXPIRED = 401300;
 }
