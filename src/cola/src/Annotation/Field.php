@@ -20,7 +20,7 @@ class Field extends AbstractAnnotation
         public string $relationType = FieldRelationType::ASSOCIATION,
         public bool $relationRequired = false,
         public string $position = '',
-        public string $ref = ''
+        public string $ref = '',
     ) {
     }
 }
