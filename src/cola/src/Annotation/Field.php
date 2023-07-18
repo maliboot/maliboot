@@ -19,7 +19,8 @@ class Field extends AbstractAnnotation
         public bool $related = false,
         public string $relationType = FieldRelationType::ASSOCIATION,
         public bool $relationRequired = false,
-        public string $position = ''
+        public string $position = '',
+        public string $ref = ''
     ) {
     }
 }
