@@ -11,6 +11,9 @@ class ConfigProvider
         return [
             'commands' => [
             ],
+            'aspects' => [
+                \MaliBoot\Cola\Aspect\InjectAspect::class
+            ],
             'dependencies' => [
                 \Hyperf\HttpServer\Router\DispatcherFactory::class => \MaliBoot\Cola\Adapter\DispatcherFactory::class,
                 \Hyperf\HttpServer\CoreMiddleware::class => \MaliBoot\Cola\Adapter\CoreMiddleware::class,
