@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MaliBoot\Cola\Annotation;
 
 use Hyperf\Di\Annotation\AbstractAnnotation;
-use MaliBoot\Lombok\contract\GetterAnnotationInterface;
-use MaliBoot\Lombok\contract\SetterAnnotationInterface;
+use MaliBoot\Lombok\Contract\GetterAnnotationInterface;
+use MaliBoot\Lombok\Contract\SetterAnnotationInterface;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class DataObject extends AbstractAnnotation implements GetterAnnotationInterface, SetterAnnotationInterface
