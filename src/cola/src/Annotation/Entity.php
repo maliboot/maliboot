@@ -6,11 +6,10 @@ namespace MaliBoot\Cola\Annotation;
 
 use Attribute;
 use Hyperf\Di\Annotation\AbstractAnnotation;
-use MaliBoot\Lombok\Contract\GetterAnnotationInterface;
-use MaliBoot\Lombok\Contract\SetterAnnotationInterface;
+use MaliBoot\Dto\Contract\StructureObjectAnnotationInterface;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
-class Entity extends AbstractAnnotation implements GetterAnnotationInterface, SetterAnnotationInterface
+#[Attribute(Attribute::TARGET_CLASS)]
+class Entity extends AbstractAnnotation implements StructureObjectAnnotationInterface
 {
     public function __construct(public string $domain = '', public string $name = '', public string $desc = '')
     {

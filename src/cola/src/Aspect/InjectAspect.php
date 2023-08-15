@@ -5,6 +5,7 @@ namespace MaliBoot\Cola\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use MaliBoot\Cola\Annotation\AggregateRoot;
+use MaliBoot\Cola\Annotation\Database;
 use MaliBoot\Cola\Annotation\DataObject;
 use MaliBoot\Cola\Annotation\DomainObject;
 use MaliBoot\Cola\Annotation\Entity;
@@ -17,7 +18,8 @@ class InjectAspect extends AbstractAspect
         DomainObject::class,
         DataObject::class,
         Entity::class,
-        ValueObject::class
+        ValueObject::class,
+        Database::class,
     ];
 
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
