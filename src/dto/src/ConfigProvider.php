@@ -14,7 +14,7 @@ class ConfigProvider
             'dependencies' => [
             ],
             'aspects' => [
-                \MaliBoot\Dto\Aspect\InjectAspect::class
+                InjectAspect::class,
             ],
             'annotations' => [
                 'scan' => [

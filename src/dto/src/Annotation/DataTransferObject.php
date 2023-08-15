@@ -8,11 +8,11 @@ use Attribute;
 use Hyperf\Di\Annotation\AbstractAnnotation;
 use MaliBoot\Dto\Constants\ContentType;
 use MaliBoot\Dto\Constants\RequestParameterLocation;
-use MaliBoot\Lombok\contract\GetterAnnotationInterface;
-use MaliBoot\Lombok\contract\SetterAnnotationInterface;
+use MaliBoot\Dto\Contract\BaseDTOAnnotationInterface;
+use MaliBoot\Dto\Contract\QueryDTOAnnotationInterface;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
-class DataTransferObject extends AbstractAnnotation implements GetterAnnotationInterface, SetterAnnotationInterface
+#[Attribute(Attribute::TARGET_CLASS)]
+class DataTransferObject extends AbstractAnnotation implements BaseDTOAnnotationInterface, QueryDTOAnnotationInterface
 {
     public function __construct(
         public string $name = '',
@@ -21,5 +21,10 @@ class DataTransferObject extends AbstractAnnotation implements GetterAnnotationI
         public string $in = RequestParameterLocation::BODY,
         public string $contentType = ContentType::WWW_FORM_URLENCODED
     ) {
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 }

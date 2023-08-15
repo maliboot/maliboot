@@ -13,7 +13,8 @@
     },
     "require": {
         "php": ">=8.0",
-        "maliboot/lombok": "*"
+        "maliboot/lombok": "*",
+        "maliboot/utils": "*"
     },
     "autoload": {
         "psr-4": {
