@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MaliBoot\Cola\Infra\Ast\Generator;
 
-use Hyperf\DbConnection\Model\Model;
 use Hyperf\Stringable\Str;
 use MaliBoot\Lombok\Annotation\LombokGenerator;
 use MaliBoot\Lombok\Ast\Generator\DelegateGenerator;
 use ReflectionAttribute;
+use ReflectionClass;
 
 #[LombokGenerator]
 class DatabaseGenerator extends DelegateGenerator
@@ -23,24 +23,21 @@ class DatabaseGenerator extends DelegateGenerator
         return DatabaseAnnotationInterface::class;
     }
 
-    protected function getConstructCodeSnippet(): string
+    protected function getDelegateClassStmts(): string
     {
         $attribute = $this->getMyAttribute();
         $table = $this->getTable($attribute);
         $connect = $attribute->getConnection();
+        $uses = $this->getUses($attribute);
 
         return <<<CODE
-\$this->_delegate->setTable('{$table}');
-\$this->_delegate->setConnection('{$connect}');
+protected ?string \$table = '{$table}';
+protected ?string \$connection = '{$connect}';
+use {$uses};
 CODE;
     }
 
-    protected function getOtherContentCodeSnippet(): string
-    {
-        $attribute = $this->getMyAttribute();
-        $uses = $this->getUsers($attribute);
-        return "use {$uses};";
-    }
+
 
     protected function getTable(DatabaseAnnotationInterface $attribute): string
     {
@@ -55,7 +52,7 @@ CODE;
         return Str::snake($className);
     }
 
-    protected function getUsers(DatabaseAnnotationInterface $attribute): string
+    protected function getUses(DatabaseAnnotationInterface $attribute): string
     {
         $uses = ['\Hyperf\Database\Model\Concerns\CamelCase'];
         if ($attribute->useSoftDeletes()) {
@@ -67,7 +64,7 @@ CODE;
 
     protected function getDelegateClassName(): string
     {
-        return Model::class;
+        return '\MaliBoot\Cola\Infra\AbstractModelDelegate';
     }
 
     private function getMyAttribute(): DatabaseAnnotationInterface
