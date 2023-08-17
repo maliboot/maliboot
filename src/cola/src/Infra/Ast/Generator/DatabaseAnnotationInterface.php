@@ -13,4 +13,6 @@ interface DatabaseAnnotationInterface extends StructureObjectAnnotationInterface
     public function useSoftDeletes(): bool;
 
     public function getConnection(): string;
+
+    public function getCastsAttributes(): string;
 }

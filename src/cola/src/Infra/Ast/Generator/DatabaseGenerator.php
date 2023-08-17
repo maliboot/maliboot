@@ -8,7 +8,6 @@ use Hyperf\Stringable\Str;
 use MaliBoot\Lombok\Annotation\LombokGenerator;
 use MaliBoot\Lombok\Ast\Generator\DelegateGenerator;
 use ReflectionAttribute;
-use ReflectionClass;
 
 #[LombokGenerator]
 class DatabaseGenerator extends DelegateGenerator
@@ -26,18 +25,29 @@ class DatabaseGenerator extends DelegateGenerator
     protected function getDelegateClassStmts(): string
     {
         $attribute = $this->getMyAttribute();
+        $castsAttrs = $attribute->getCastsAttributes();
+        $castsAttrs[0] !== '\\' && $castsAttrs = '\\' . $castsAttrs;
         $table = $this->getTable($attribute);
         $connect = $attribute->getConnection();
         $uses = $this->getUses($attribute);
+        $fillable = [];
+        $casts = [];
+        foreach ($this->reflectionClass->getProperties() as $reflectionProperty) {
+            $fieldName = Str::snake($reflectionProperty->getName());
+            $fillable[] = $fieldName;
+            $casts[$fieldName] = $castsAttrs;
+        }
+        $fillableStr = var_export($fillable, true);
+        $castsStr = var_export($casts, true);
 
         return <<<CODE
 protected ?string \$table = '{$table}';
 protected ?string \$connection = '{$connect}';
+protected array \$fillable = {$fillableStr};
+protected array \$casts = {$castsStr};
 use {$uses};
 CODE;
     }
-
-
 
     protected function getTable(DatabaseAnnotationInterface $attribute): string
     {
