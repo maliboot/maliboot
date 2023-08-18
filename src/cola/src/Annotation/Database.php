@@ -5,19 +5,26 @@ declare(strict_types=1);
 namespace MaliBoot\Cola\Annotation;
 
 use Attribute;
-use Hyperf\Contract\CastsAttributes;
 use Hyperf\Di\Annotation\AbstractAnnotation;
 use MaliBoot\Cola\Infra\Ast\Generator\DatabaseAnnotationInterface;
-use MaliBoot\Cola\Infra\DOCastsAttributes;
+use MaliBoot\Cola\Infra\DODatabaseCastsAttributes;
+use MaliBoot\Cola\Infra\DODatabaseFieldDelegate;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 class Database extends AbstractAnnotation implements DatabaseAnnotationInterface
 {
+    /**
+     * 数据库ORM委托.
+     * @param null|string $table 表名称
+     * @param string $connection 数据库连接
+     * @param bool $useSoftDeletes 是否使用软删除
+     * @param string $castsAttributes 类名称。功能：自定义字段的类型映射。需要实现<a href='psi_element://\Hyperf\Contract\CastsAttributes'>CastsAttributes</a>
+     */
     public function __construct(
         public ?string $table = null,
-        public bool $useSoftDeletes = false,
         public string $connection = 'default',
-        public string $castsAttributes = DOCastsAttributes::class,
+        public bool $useSoftDeletes = false,
+        public string $castsAttributes = DODatabaseCastsAttributes::class,
     ) {
     }
 
@@ -43,11 +50,11 @@ class Database extends AbstractAnnotation implements DatabaseAnnotationInterface
 
     public function getterDelegate(): ?string
     {
-        return null;
+        return DODatabaseFieldDelegate::class;
     }
 
     public function setterDelegate(): ?string
     {
-        return null;
+        return DODatabaseFieldDelegate::class;
     }
 }

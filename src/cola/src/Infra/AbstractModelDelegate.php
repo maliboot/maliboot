@@ -20,7 +20,7 @@ abstract class AbstractModelDelegate extends Model
                 continue;
             }
             $doClassName = $model->delegatedSource();
-            $model = (new $doClassName())->ofData($model->toArray())->setMyDelegate($model);
+            $model = (new $doClassName())->setMyDelegate($model)->ofData($model->toArray());
         }
         return new Collection($models);
     }

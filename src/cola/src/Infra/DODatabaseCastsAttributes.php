@@ -10,7 +10,7 @@ use Hyperf\Contract\CastsAttributes;
  * 数据对象的模型字段的类型映射，按需要进行继承改写.
  * @document https://hyperf.wiki/3.0/#/zh-cn/db/mutators?id=字段类型转换
  */
-class DOCastsAttributes implements CastsAttributes
+class DODatabaseCastsAttributes implements CastsAttributes
 {
     /**
      * 应进行类型转换的字段 ...
