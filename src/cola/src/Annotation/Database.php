@@ -40,4 +40,14 @@ class Database extends AbstractAnnotation implements DatabaseAnnotationInterface
     {
         return $this->castsAttributes;
     }
+
+    public function getterDelegate(): ?string
+    {
+        return null;
+    }
+
+    public function setterDelegate(): ?string
+    {
+        return null;
+    }
 }

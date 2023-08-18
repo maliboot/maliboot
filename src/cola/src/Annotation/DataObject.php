@@ -14,12 +14,26 @@ use MaliBoot\Lombok\Contract\SetterAnnotationInterface;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class DataObject extends AbstractAnnotation implements StructureObjectAnnotationInterface, ToEntityAnnotationInterface, OfEntityAnnotationInterface
 {
+    /**
+     * @param ?string $getterSetterDelegate GetterSetter委托类<div><p>默认为null，无委托</p><p>委托类需要实现<a href='psi_element://\MaliBoot\Lombok\Contract\GetterSetterDelegateInterface'>GetterSetterDelegateInterface</a></p></div>
+     */
     public function __construct(
         public string $domain = '',
         public string $name = '',
         public string $desc = '',
         public string $table = '',
-        public string $connection = 'default'
+        public string $connection = 'default',
+        public ?string $getterSetterDelegate = null,
     ) {
+    }
+
+    public function getterDelegate(): ?string
+    {
+        return $this->getterSetterDelegate;
+    }
+
+    public function setterDelegate(): ?string
+    {
+        return $this->getterSetterDelegate;
     }
 }

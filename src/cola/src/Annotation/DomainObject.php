@@ -9,10 +9,25 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
 use MaliBoot\Lombok\Contract\GetterAnnotationInterface;
 use MaliBoot\Lombok\Contract\SetterAnnotationInterface;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_CLASS)]
 class DomainObject extends AbstractAnnotation implements GetterAnnotationInterface, SetterAnnotationInterface
 {
-    public function __construct(public string $domain = '', public bool $isAggregateRoot = false, public string $name = '', public string $desc = '')
+    public function __construct(
+        public string $domain = '',
+        public bool $isAggregateRoot = false,
+        public string $name = '',
+        public string $desc = '',
+        public ?string $getterSetterDelegate = null,
+    ) {
+    }
+
+    public function getterDelegate(): ?string
     {
+        return $this->getterSetterDelegate;
+    }
+
+    public function setterDelegate(): ?string
+    {
+        return $this->getterSetterDelegate;
     }
 }
