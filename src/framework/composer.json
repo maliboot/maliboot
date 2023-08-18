@@ -1,0 +1,39 @@
+{
+    "name": "maliboot/framework",
+    "description": "A framework library for Maliboot.",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "swoole",
+        "hyperf",
+        "Maliboot",
+        "framework"
+    ],
+    "support": {
+    },
+    "require": {
+        "php": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MaliBoot\\Framework\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MaliBootTest\\Framework\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hyperf": {
+            "config": "MaliBoot\\Framework\\ConfigProvider"
+        }
+    }
+}
