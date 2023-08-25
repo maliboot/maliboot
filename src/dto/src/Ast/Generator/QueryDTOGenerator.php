@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MaliBoot\Dto\Ast\Generator;
 
+use MaliBoot\Dto\AbstractPageQuery;
 use MaliBoot\Dto\Contract\QueryDTOAnnotationInterface;
 use MaliBoot\Lombok\Annotation\LombokGenerator;
 use MaliBoot\Lombok\Ast\AbstractClassVisitor;
@@ -28,6 +29,10 @@ class QueryDTOGenerator extends AbstractClassVisitor
             return false;
         }
 
+        if (is_subclass_of($this->reflectionClass->getName(), AbstractPageQuery::class)) {
+            return false;
+        }
+
         /** @var ReflectionAttribute $attribute */
         $reflectionAttribute = $this->reflectionClass->getAttributes(QueryDTOAnnotationInterface::class, ReflectionAttribute::IS_INSTANCEOF)[0];
         /** @var QueryDTOAnnotationInterface $attribute */
@@ -46,19 +51,19 @@ class QueryDTOGenerator extends AbstractClassVisitor
 class AbstractPageQuery {
     public const DEFAULT_PAGE_SIE = 10;
 
-    private int $pageSize = self::DEFAULT_PAGE_SIE;
+    protected int $pageSize = self::DEFAULT_PAGE_SIE;
 
-    private int $pageIndex = 1;
+    protected int $pageIndex = 1;
 
-    private string|array $orderBy = '';
+    protected string|array $orderBy = '';
 
-    private string $groupBy;
+    protected string $groupBy;
 
-    private bool $needTotalCount = true;
+    protected bool $needTotalCount = true;
 
-    private array $filters = [];
+    protected array $filters = [];
 
-    private array $columns = ['*'];
+    protected array $columns = ['*'];
 
     public function getPageSize(): int
     {
