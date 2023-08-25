@@ -19,6 +19,7 @@
             "MaliBoot\\Utils\\": "src/"
         },
         "files": [
+            "src/Functions.php"
         ]
     },
     "autoload-dev": {
