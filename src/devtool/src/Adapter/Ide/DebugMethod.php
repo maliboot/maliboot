@@ -1,13 +1,13 @@
 <?php
 
-namespace MaliBoot\Devtool\Ide;
+namespace MaliBoot\Devtool\Adapter\Ide;
 
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 
 #[Controller]
-class DebugMethod extends AbstractHttp
+class DebugMethod extends AbstractIDE
 {
     #[RequestMapping(path: "/devtool/ide/debug/method", methods: "POST")]
     public function index(RequestInterface $request)

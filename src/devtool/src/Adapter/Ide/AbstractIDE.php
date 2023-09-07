@@ -1,8 +1,8 @@
 <?php
 
-namespace MaliBoot\Devtool\Ide;
+namespace MaliBoot\Devtool\Adapter\Ide;
 
-abstract class AbstractHttp
+abstract class AbstractIDE
 {
     public function response(string $result = '', int $code = 200): array
     {
