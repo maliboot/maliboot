@@ -243,7 +243,7 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
      *
      * @return PageVO 分页数据
      */
-    public function listByPage(AbstractPageQuery $pageQuery): PageVO
+    public function listByPage(mixed $pageQuery): PageVO
     {
         $this->applyCriteria()->applyScope();
 
