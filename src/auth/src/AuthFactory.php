@@ -76,11 +76,14 @@ class AuthFactory implements AuthFactoryContract
     {
         $request = $this->container->get(RequestInterface::class);
         try {
-            $guard = make(JwtGuard::class, [$config, $name, $this->userResolver, $request]);
+            $providerName = $this->getConfig($name)['provider'];
+            $guard = make(JwtGuard::class, [$config, $name, $this->provider($providerName), $request]);
         } catch (\InvalidArgumentException $exception) {
             if (Str::contains($exception->getMessage(), 'Secret')) {
                 throw new \InvalidArgumentException('Secret 未填写，请检查配置文件 config/autoload/auth.php 或环境变量 .env 中是否配置。');
             }
+
+            throw $exception;
         }
 
         return $guard;
