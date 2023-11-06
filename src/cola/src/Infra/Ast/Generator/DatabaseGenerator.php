@@ -65,7 +65,7 @@ CODE;
     protected function getUses(DatabaseAnnotationInterface $attribute): string
     {
         $uses = ['\Hyperf\Database\Model\Concerns\CamelCase'];
-        if ($attribute->useSoftDeletes()) {
+        if ($attribute->softDeletes()) {
             $uses[] = '\Hyperf\Database\Model\SoftDeletes';
         }
 

@@ -17,13 +17,13 @@ class Database extends AbstractAnnotation implements DatabaseAnnotationInterface
      * 数据库ORM委托.
      * @param null|string $table 表名称
      * @param string $connection 数据库连接
-     * @param bool $useSoftDeletes 是否使用软删除
+     * @param bool $softDeletes 是否使用软删除
      * @param string $castsAttributes 类名称。功能：自定义字段的类型映射。需要实现<a href='psi_element://\Hyperf\Contract\CastsAttributes'>CastsAttributes</a>
      */
     public function __construct(
         public ?string $table = null,
         public string $connection = 'default',
-        public bool $useSoftDeletes = false,
+        public bool $softDeletes = false,
         public string $castsAttributes = DODatabaseCastsAttributes::class,
     ) {
     }
@@ -33,9 +33,9 @@ class Database extends AbstractAnnotation implements DatabaseAnnotationInterface
         return $this->table;
     }
 
-    public function useSoftDeletes(): bool
+    public function softDeletes(): bool
     {
-        return $this->useSoftDeletes;
+        return $this->softDeletes;
     }
 
     public function getConnection(): string

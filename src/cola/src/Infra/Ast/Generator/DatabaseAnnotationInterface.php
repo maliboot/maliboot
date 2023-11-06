@@ -10,7 +10,7 @@ interface DatabaseAnnotationInterface extends StructureObjectAnnotationInterface
 {
     public function getTable(): ?string;
 
-    public function useSoftDeletes(): bool;
+    public function softDeletes(): bool;
 
     public function getConnection(): string;
 
