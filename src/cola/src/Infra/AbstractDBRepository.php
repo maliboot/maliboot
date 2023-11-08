@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MaliBoot\Cola\Infra;
 
+use Closure;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Utils\Str;
 use MaliBoot\Cola\Exception\RepositoryException;
@@ -11,7 +12,10 @@ use MaliBoot\ErrorCode\Constants\ServerErrorCode;
 
 abstract class AbstractDBRepository
 {
-    protected AbstractDatabaseDO|Builder $do;
+    /**
+     * @var Builder ...
+     */
+    protected mixed $do;
 
     protected ?string $doFQN = null;
 
@@ -21,26 +25,36 @@ abstract class AbstractDBRepository
         return $this;
     }
 
-    public function resetDO(): AbstractDatabaseDO
+    public function resetDO(): object
     {
         $this->doFQN = null;
         return $this->makeDO();
     }
 
-    public function changeDO(string $doFQN, array $attributes = []): AbstractDatabaseDO
+    /**
+     * @param string $doFQN ...
+     * @return Builder ...
+     */
+    public function changeDO(string $doFQN): mixed
     {
         $this->doFQN = $doFQN;
-        return $this->makeDO($attributes);
+        return $this->makeDO();
     }
 
-    public function getDO(array $attributes = []): AbstractDatabaseDO
+    /**
+     * @return Builder ...
+     */
+    public function getDO(): mixed
     {
-        return $this->makeDO($attributes);
+        return $this->makeDO();
     }
 
-    protected function makeDO(array $attributes = []): AbstractDatabaseDO
+    /**
+     * @return Builder ...
+     */
+    protected function makeDO(): mixed
     {
-        return $this->do = make($this->doFQN ?: $this->do(), [$attributes]);
+        return $this->do = \Hyperf\Support\make($this->doFQN ?: $this->do());
     }
 
     protected function do(): string
@@ -56,7 +70,7 @@ abstract class AbstractDBRepository
 
     /**
      * 将给定的 where 条件应用于 DO.
-     *  @param array $where Sample<code>
+     * @param array $where Sample<code>
      *
      * $where = ['id' => 1];
      * $where = ['id', '>',  1];
@@ -142,31 +156,31 @@ abstract class AbstractDBRepository
                         $do = $do->whereYear($field, $operator, $val);
                         break;
                     case QueryConnector::EXISTS:
-                        if (! $val instanceof \Closure) {
+                        if (! $val instanceof Closure) {
                             throw new RepositoryException(ServerErrorCode::WHERE_INVALID_PARAMS, "Input {$val} must be closure function");
                         }
                         $do = $do->whereExists($val);
                         break;
                     case QueryConnector::HAS:
-                        if (! $val instanceof \Closure) {
+                        if (! $val instanceof Closure) {
                             throw new RepositoryException(ServerErrorCode::WHERE_INVALID_PARAMS, "Input {$val} must be closure function");
                         }
                         $do = $do->whereHas($field, $val);
                         break;
                     case QueryConnector::HAS_MORPH:
-                        if (! $val instanceof \Closure) {
+                        if (! $val instanceof Closure) {
                             throw new RepositoryException(ServerErrorCode::WHERE_INVALID_PARAMS, "Input {$val} must be closure function");
                         }
                         $do = $do->whereHasMorph($field, $val);
                         break;
                     case QueryConnector::DOESNT_HAVE:
-                        if (! $val instanceof \Closure) {
+                        if (! $val instanceof Closure) {
                             throw new RepositoryException(ServerErrorCode::WHERE_INVALID_PARAMS, "Input {$val} must be closure function");
                         }
                         $do = $do->whereDoesntHave($field, $val);
                         break;
                     case QueryConnector::DOESNT_HAVE_MORPH:
-                        if (! $val instanceof \Closure) {
+                        if (! $val instanceof Closure) {
                             throw new RepositoryException(ServerErrorCode::WHERE_INVALID_PARAMS, "Input {$val} must be closure function");
                         }
                         $do = $do->whereDoesntHaveMorph($field, $val);
@@ -202,7 +216,7 @@ abstract class AbstractDBRepository
                         $do = $do->where($field, $condition, $val);
                 }
             } else {
-                $field = Str::snake($field);
+                $field = \Hyperf\Stringable\Str::snake((string) $field);
                 $do = $do->where($field, QueryConnector::OPERATOR_EQ->value, $value);
             }
         }

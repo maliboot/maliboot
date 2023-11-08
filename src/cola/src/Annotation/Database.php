@@ -14,7 +14,8 @@ use MaliBoot\Cola\Infra\DODatabaseFieldDelegate;
 class Database extends AbstractAnnotation implements DatabaseAnnotationInterface
 {
     /**
-     * 数据库ORM委托.
+     * <h3>数据库ORM委托.</h3>
+     * <p>-注：本类默认将所有逻辑，全权委托于 <a href='psi_element://\MaliBoot\Cola\Infra\AbstractModelDelegate'>AbstractModelDelegate</a> 处理</p>
      * @param null|string $table 表名称
      * @param string $connection 数据库连接
      * @param bool $softDeletes 是否使用软删除
