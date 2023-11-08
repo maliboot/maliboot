@@ -6,6 +6,7 @@ namespace MaliBoot\Cola\Domain;
 
 /**
  * AbstractService.
+ * @deprecated ...
  */
 abstract class AbstractDomainService
 {

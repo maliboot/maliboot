@@ -14,25 +14,25 @@ interface CommandRepositoryInterface
 {
     /**
      * 单条添加.
-     * @param AggregateRootInterface $entity ...
+     * @param object $entity ...
      * @return int ...
      */
-    public function create(AggregateRootInterface $entity): int;
+    public function create(object $entity): int;
 
     /**
      * 单条修改.
-     * @param AggregateRootInterface $entity ...
+     * @param object $entity ...
      * @return bool ...
      * @throws RepositoryException ...
      */
-    public function update(AggregateRootInterface $entity): bool;
+    public function update(object $entity): bool;
 
     /**
      * 单条保存.
-     * @param AggregateRootInterface $entity ...
+     * @param object $entity ...
      * @return bool|int ...
      */
-    public function save(AggregateRootInterface $entity): int|bool;
+    public function save(object $entity): bool|int;
 
     /**
      * 单条删除.
@@ -44,17 +44,17 @@ interface CommandRepositoryInterface
     /**
      * 单条查询-根据id.
      * @param int|string $id ...
-     * @return null|AggregateRootInterface ...
+     * @return null|object ...
      */
-    public function find(int|string $id): ?AggregateRootInterface;
+    public function find(int|string $id): ?object;
 
     /**
      * 单条查询-根据单条件.
      * @param string $field ...
      * @param mixed $value ...
-     * @return null|AggregateRootInterface ...
+     * @return null|object ...
      */
-    public function findBy(string $field, mixed $value): ?AggregateRootInterface;
+    public function findBy(string $field, mixed $value): ?object;
 
     /**
      * 单条查询-根据条件.
@@ -73,13 +73,13 @@ interface CommandRepositoryInterface
      * ]
      * </code>
      * @param null|string $entityFQN ...
-     * @return null|AggregateRootInterface ...
+     * @return null|object ...
      */
-    public function firstBy(array $where, ?string $entityFQN = null): ?AggregateRootInterface;
+    public function firstBy(array $where, ?string $entityFQN = null): ?object;
 
     /**
      * 批量添加.
-     * @param AggregateRootInterface[] $entities ...
+     * @param object[] $entities ...
      * @return bool ...
      */
     public function insert(array $entities): bool;
@@ -101,16 +101,16 @@ interface CommandRepositoryInterface
      * ]
      * </code>
      * @param null|string $entityFQN 指定转化的实体FQN
-     * @return null|Collection<AggregateRootInterface> 实体集合：Collection[AggregateRootInterface]
+     * @return null|Collection<object> 实体集合：Collection[object]
      */
     public function allBy(array $where, ?string $entityFQN = null): ?Collection;
 
     /**
      * 批量修改-根据主键.
-     * @param AggregateRootInterface[] $entities 实体列表<br/>1、必须包含有主键；<br/>2、字段数量必须保持一致；<br/>3、例子：<code>
+     * @param object[] $entities 实体列表<br/>1、必须包含有主键；<br/>2、字段数量必须保持一致；<br/>3、例子：<code>
      *
      * // other code ...
-     * class Foo implement AggregateRootInterface
+     * class Foo implement object
      * {
      *    private int $id;
      *    private int $name;

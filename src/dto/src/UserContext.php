@@ -9,8 +9,6 @@ use MaliBoot\Utils\Traits\SetPropertiesTrait;
 
 class UserContext implements ContextInterface
 {
-    use SetPropertiesTrait;
-
     private int|string $id;
 
     private string $username;

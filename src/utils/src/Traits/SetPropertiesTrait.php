@@ -8,6 +8,9 @@ use Hyperf\Utils\Arr;
 use Hyperf\Utils\Str;
 use MaliBoot\FieldCollector\FieldCollector;
 
+/**
+ * @deprecated ...
+ */
 trait SetPropertiesTrait
 {
     use GetSetPropertyTrait;

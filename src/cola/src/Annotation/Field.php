@@ -8,6 +8,9 @@ use Attribute;
 use Hyperf\Di\Annotation\AbstractAnnotation;
 use MaliBoot\Cola\Client\Constants\FieldRelationType;
 
+/**
+ * @deprecated ...
+ */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 class Field extends AbstractAnnotation
 {

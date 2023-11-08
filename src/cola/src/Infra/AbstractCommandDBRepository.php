@@ -6,35 +6,34 @@ namespace MaliBoot\Cola\Infra;
 
 use Hyperf\Collection\Collection;
 use Hyperf\DbConnection\Db;
-use MaliBoot\Cola\Domain\AggregateRootInterface;
 use MaliBoot\Cola\Domain\CommandRepositoryInterface;
-use MaliBoot\Cola\Domain\EntityInterface;
 use MaliBoot\Cola\Exception\RepositoryException;
 
 abstract class AbstractCommandDBRepository extends AbstractDBRepository implements CommandRepositoryInterface
 {
-    public function save(AggregateRootInterface $entity): int|bool
+    public function save(object $entity, string $primaryKey = 'id'): bool|int
     {
-        if (empty($entity->getId())) {
+        $callMethod = 'get' . ucfirst($primaryKey);
+        if (! method_exists($entity, $callMethod) || $entity->{$callMethod}() === null) {
             return $this->create($entity);
         }
 
         return $this->update($entity);
     }
 
-    public function create(AggregateRootInterface $entity): int
+    public function create(object $entity): int
     {
         return $this->getDO()->createGetId($entity->toArray());
     }
 
-    public function update(AggregateRootInterface $entity): bool
+    public function update(object $entity): bool
     {
         $do = $this->getDO();
         $values = $do->columnsFormat($entity->toArray(), true);
         $primaryKey = $do->getKeyName();
         if (! isset($values[$primaryKey])) {
             throw new RepositoryException(500, sprintf(
-                '%s::update(AggregateRootInterface $entity)缺失主键[%s]值：%s',
+                '%s::update(object $entity)缺失主键[%s]值：%s',
                 $this::class,
                 $primaryKey,
                 json_encode($values)
@@ -44,32 +43,32 @@ abstract class AbstractCommandDBRepository extends AbstractDBRepository implemen
         return (bool) $do->where('id', $primaryValue)->update($values);
     }
 
-    public function delete(int|string|array|Collection $ids): int
+    public function delete(array|Collection|int|string $ids): int
     {
         return $this->getDO()->destroy($ids);
     }
 
-    public function find(int|string $id): ?AggregateRootInterface
+    public function find(int|string $id, ?string $entityFQN = null): ?object
     {
         $do = $this->getDO()->find($id);
         if (! empty($do)) {
-            return $do->toEntity();
+            return $do->toEntity($entityFQN);
         }
 
         return null;
     }
 
-    public function findBy(string $field, $value): ?AggregateRootInterface
+    public function findBy(string $field, $value, ?string $entityFQN = null): ?object
     {
         $do = $this->getDO()->where($field, $value)->first();
         if (! empty($do)) {
-            return $do->toEntity();
+            return $do->toEntity($entityFQN);
         }
 
         return null;
     }
 
-    public function firstBy(array $where, ?string $entityFQN = null): ?AggregateRootInterface
+    public function firstBy(array $where, ?string $entityFQN = null): ?object
     {
         $result = $this->applyConditions($where)->first();
         $this->reset();
@@ -79,7 +78,7 @@ abstract class AbstractCommandDBRepository extends AbstractDBRepository implemen
     public function allBy(array $where, ?string $entityFQN = null): ?Collection
     {
         $result = $this->applyConditions($where)->get()?->map(function ($item) use ($entityFQN) {
-            /* @var AbstractDatabaseDO $item ... */
+            /* @var AbstractModelDelegate $item ... */
             return $item->toEntity($entityFQN);
         });
         $this->reset();
@@ -88,13 +87,13 @@ abstract class AbstractCommandDBRepository extends AbstractDBRepository implemen
 
     /**
      * 批量添加.
-     * @param AggregateRootInterface[] $entities ...
+     * @param object[] $entities ...
      * @return bool ...
      */
     public function insert(array $entities): bool
     {
         $values = array_reduce($entities, function ($carry, $item) {
-            if ($item instanceof EntityInterface && ! empty($itemData = $item->toArray())) {
+            if (method_exists($item, 'toArray') && ! empty($itemData = $item->toArray())) {
                 $carry[] = $itemData;
             }
             return $carry;
@@ -112,7 +111,7 @@ abstract class AbstractCommandDBRepository extends AbstractDBRepository implemen
     public function batchUpdate(array $entities): int
     {
         return $this->batchUpdateByIds(array_reduce($entities, function ($carry, $item) {
-            if ($item instanceof EntityInterface) {
+            if (method_exists($item, 'toArray')) {
                 $carry[] = $this->getDO()->columnsFormat($item->toArray(), true);
             }
             return $carry;

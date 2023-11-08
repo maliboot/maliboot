@@ -7,6 +7,9 @@ namespace MaliBoot\Dto\Annotation;
 use Attribute;
 use Hyperf\Di\Annotation\AbstractAnnotation;
 
+/**
+ * @deprecated ...
+ */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 class Field extends AbstractAnnotation
 {

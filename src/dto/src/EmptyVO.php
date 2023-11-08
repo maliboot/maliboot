@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace MaliBoot\Dto;
 
+use MaliBoot\Dto\Annotation\ViewObject;
 use MaliBoot\Utils\Traits\StructureObjectTrait;
 
-class EmptyVO extends AbstractViewObject
+#[ViewObject]
+class EmptyVO
 {
-    use StructureObjectTrait;
 }

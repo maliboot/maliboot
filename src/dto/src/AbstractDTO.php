@@ -9,6 +9,7 @@ use MaliBoot\Utils\Traits\StructureObjectTrait;
 
 /**
  * 数据传输对象，包括命令、查询和响应，命令和查询CQRS概念.
+ * @deprecated ...
  */
 abstract class AbstractDTO implements \ArrayAccess
 {

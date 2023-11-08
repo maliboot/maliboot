@@ -6,6 +6,9 @@ namespace MaliBoot\Dto;
 
 use MaliBoot\Dto\Annotation\Field;
 
+/**
+ * @deprecated ...
+ */
 abstract class AbstractPageQuery extends AbstractQuery
 {
     public const DEFAULT_PAGE_SIE = 10;

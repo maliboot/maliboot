@@ -16,7 +16,7 @@ class ConfigProvider
             'dependencies' => [
             ],
             'listeners' => [
-                CollectFieldListener::class,
+//                CollectFieldListener::class,
             ],
             'annotations' => [
             ],

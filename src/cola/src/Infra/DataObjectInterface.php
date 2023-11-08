@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MaliBoot\Cola\Infra;
 
-use MaliBoot\Cola\Domain\AggregateRootInterface;
-use MaliBoot\Cola\Domain\EntityInterface;
-
+/**
+ * @deprecated ..
+ */
 interface DataObjectInterface
 {
     /**
@@ -14,13 +14,13 @@ interface DataObjectInterface
      *
      * @return DataObjectInterface
      */
-    public static function ofEntity(AggregateRootInterface $entity);
+    public static function ofEntity(object $entity);
 
     /**
      * 将 DO 转换为实体.
      *
      * @param null|string $entityFQN 指定实体FQN
-     * @return ?EntityInterface
+     * @return ?object
      */
     public function toEntity(?string $entityFQN = null);
 

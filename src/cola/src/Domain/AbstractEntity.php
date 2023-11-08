@@ -9,6 +9,7 @@ use MaliBoot\Utils\Traits\StructureObjectTrait;
 
 /**
  * 领域实体.
+ * @deprecated ...
  */
 abstract class AbstractEntity implements EntityInterface, \ArrayAccess
 {

@@ -15,6 +15,9 @@ use MaliBoot\Cola\Domain\EntityInterface;
 use MaliBoot\FieldCollector\FieldCollector;
 use MaliBoot\Utils\Traits\StructureObjectTrait;
 
+/**
+ * @deprecated be instead of \MaliBoot\Cola\Infra\AbstractModelDelegate
+ */
 abstract class AbstractDatabaseDO extends BaseModel implements DataObjectInterface
 {
     use StructureObjectTrait, CamelCase {
@@ -47,7 +50,7 @@ abstract class AbstractDatabaseDO extends BaseModel implements DataObjectInterfa
         return $this->getterAndSetterCall($method, $args);
     }
 
-    public static function ofEntity(AggregateRootInterface $entity): static
+    public static function ofEntity(object $entity): static
     {
         return new static($entity->toArray());
     }

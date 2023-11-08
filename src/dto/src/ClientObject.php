@@ -6,6 +6,7 @@ namespace MaliBoot\Dto;
 
 /**
  * 客户端通信的对象，客户端可以是视图层或其他RPC消费者.
+ * @deprecated ...
  */
 abstract class ClientObject extends AbstractDTO
 {

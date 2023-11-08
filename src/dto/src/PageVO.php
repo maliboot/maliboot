@@ -6,15 +6,12 @@ namespace MaliBoot\Dto;
 
 use MaliBoot\Utils\Collection;
 use MaliBoot\Utils\Contract\Arrayable;
-use MaliBoot\Utils\Traits\StructureObjectTrait;
 
 /**
  * @template T
  */
-class PageVO extends AbstractViewObject
+class PageVO
 {
-    use StructureObjectTrait;
-
     /**
      * @var int 总数
      */

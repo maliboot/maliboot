@@ -17,7 +17,7 @@ use IteratorAggregate;
  * @implements Arrayable<TKey, TValue>
  * @implements IteratorAggregate<TKey, TValue>
  */
-class MultiVO extends AbstractViewObject implements \ArrayAccess, Arrayable, \IteratorAggregate, Jsonable, \JsonSerializable
+class MultiVO implements \ArrayAccess, Arrayable, \IteratorAggregate, Jsonable, \JsonSerializable
 {
     /**
      * The items contained in the collection.

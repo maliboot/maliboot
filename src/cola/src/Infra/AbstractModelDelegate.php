@@ -56,9 +56,4 @@ abstract class AbstractModelDelegate extends Model
         $values = $this->columnsFormat($values, true);
         return $this->newQuery()->insertGetId($values, $sequence);
     }
-
-    public function fillPropertiesFromAttributes(): void
-    {
-//        $this->setProperties($this->getAttributes());
-    }
 }

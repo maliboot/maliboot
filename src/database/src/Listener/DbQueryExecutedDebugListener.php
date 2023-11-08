@@ -45,6 +45,7 @@ class DbQueryExecutedDebugListener implements ListenerInterface
         }
         $debugSql = $response->getAttribute(ResponseDbQueryDebug::class, []);
         $debugSql[] = ['time' => $event->time, 'query' => $sql];
+        function_exists('dump') && dump($debugSql);
         Context::set(ResponseInterface::class, $response->withAttribute(ResponseDbQueryDebug::class, $debugSql));
     }
 }

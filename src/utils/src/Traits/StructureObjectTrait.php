@@ -8,6 +8,9 @@ use Hyperf\Di\ReflectionManager;
 use Hyperf\Utils\Codec\Json;
 use MaliBoot\Utils\Contract\Arrayable;
 
+/**
+ * @deprecated ...
+ */
 trait StructureObjectTrait
 {
     use GetterAndSetterTrait;

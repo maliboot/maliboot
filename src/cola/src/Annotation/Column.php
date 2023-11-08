@@ -7,6 +7,9 @@ namespace MaliBoot\Cola\Annotation;
 use Attribute;
 use Hyperf\Di\Annotation\AbstractAnnotation;
 
+/**
+ * @deprecated ...
+ */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 class Column extends AbstractAnnotation
 {

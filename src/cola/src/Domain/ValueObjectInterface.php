@@ -7,7 +7,8 @@ namespace MaliBoot\Cola\Domain;
 use MaliBoot\Utils\Contract\Arrayable;
 
 /**
- * 领域值对象
+ * 领域值对象.
+ * @deprecated ...
  */
 interface ValueObjectInterface extends Arrayable
 {

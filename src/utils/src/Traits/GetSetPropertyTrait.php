@@ -12,6 +12,9 @@ use MaliBoot\Dto\AbstractDTO;
 use MaliBoot\FieldCollector\FieldCollector;
 use MaliBoot\Utils\Collection;
 
+/**
+ * @deprecated ...
+ */
 trait GetSetPropertyTrait
 {
     protected function getClassPropertyValue(string $propertyName): mixed

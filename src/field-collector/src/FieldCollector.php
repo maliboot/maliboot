@@ -6,6 +6,9 @@ namespace MaliBoot\FieldCollector;
 
 use Hyperf\Di\MetadataCollector;
 
+/**
+ * @deprecated ...
+ */
 class FieldCollector extends MetadataCollector
 {
     protected static array $container = [];

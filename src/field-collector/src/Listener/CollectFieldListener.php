@@ -19,6 +19,9 @@ use MaliBoot\Dto\Annotation\Field as DTOField;
 use MaliBoot\Dto\Annotation\ViewObject;
 use MaliBoot\FieldCollector\FieldCollector;
 
+/**
+ * @deprecated ...
+ */
 class CollectFieldListener implements ListenerInterface
 {
     protected array $fieldClasses = [

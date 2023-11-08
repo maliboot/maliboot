@@ -7,7 +7,6 @@ namespace MaliBoot\Cola\Infra;
 use Hyperf\Contract\PaginatorInterface;
 use Hyperf\Database\Model\Builder;
 use MaliBoot\Cola\Exception\RepositoryException;
-use MaliBoot\Dto\AbstractPageQuery;
 use MaliBoot\Dto\PageVO;
 use MaliBoot\Utils\Collection;
 
@@ -24,7 +23,7 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
      *
      * @return mixed
      */
-    public static function __callStatic(string $method, array $arguments)
+    public static function __callStatic($method, $arguments)
     {
         return call_user_func_array([new static(), $method], $arguments);
     }
@@ -34,7 +33,7 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
      *
      * @return mixed
      */
-    public function __call(string $method, array $arguments)
+    public function __call($method, $arguments)
     {
         $this->applyCriteria();
         $this->applyScope();
@@ -175,8 +174,6 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
             $newResult->setTotalCount($result->total());
             $newResult->setPageSize($result->perPage());
             return $newResult;
-        } elseif ($result instanceof AbstractDatabaseDO) {
-            $result->fillPropertiesFromAttributes();
         }
 
         return $result;
@@ -431,7 +428,7 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
             $criteria = new $criteria();
         }
         if (! $criteria instanceof CriteriaInterface) {
-            throw new RepositoryException('Class ' . get_class($criteria) . ' must be an instance of MaliBoot\\Cola\\Infra\\CriteriaInterface');
+            throw new RepositoryException(500, 'Class ' . get_class($criteria) . ' must be an instance of MaliBoot\\Cola\\Infra\\CriteriaInterface');
         }
         $this->criteria->push($criteria);
 

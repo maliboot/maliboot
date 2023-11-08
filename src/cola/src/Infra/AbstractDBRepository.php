@@ -6,7 +6,7 @@ namespace MaliBoot\Cola\Infra;
 
 use Closure;
 use Hyperf\Database\Model\Builder;
-use Hyperf\Utils\Str;
+use Hyperf\Stringable\Str;
 use MaliBoot\Cola\Exception\RepositoryException;
 use MaliBoot\ErrorCode\Constants\ServerErrorCode;
 
@@ -86,8 +86,10 @@ abstract class AbstractDBRepository
      *      ['name', 'LIKE',  '%foo%'],
      * ]
      * </code>
+     *
+     * @return Builder ...
      */
-    protected function applyConditions(array $where): AbstractDatabaseDO|Builder
+    protected function applyConditions(array $where): mixed
     {
         // 组织结构
         if (isset($where[0], $where[1]) && ! is_array($where[0]) && ! is_array($where[1])) {
@@ -216,7 +218,7 @@ abstract class AbstractDBRepository
                         $do = $do->where($field, $condition, $val);
                 }
             } else {
-                $field = \Hyperf\Stringable\Str::snake((string) $field);
+                $field = Str::snake((string) $field);
                 $do = $do->where($field, QueryConnector::OPERATOR_EQ->value, $value);
             }
         }
