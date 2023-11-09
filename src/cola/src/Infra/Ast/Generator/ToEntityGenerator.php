@@ -42,7 +42,7 @@ class Template {
         if ($entityFQN === null || ! class_exists($entityFQN)) {
             return null;
         }
-        return call_user_func([$entityFQN, 'of'], $this->attributesToArray());
+        return call_user_func([$entityFQN, 'of'], $this->toArray());
     }
 }
 CODE;

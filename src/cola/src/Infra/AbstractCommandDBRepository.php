@@ -23,7 +23,11 @@ abstract class AbstractCommandDBRepository extends AbstractDBRepository implemen
 
     public function create(object $entity): int
     {
-        return $this->getDO()->createGetId($entity->toArray());
+        $insertData = $entity->toArray();
+        if (empty($insertData)) {
+            return 0;
+        }
+        return $this->getDO()->createGetId($insertData);
     }
 
     public function update(object $entity): bool
