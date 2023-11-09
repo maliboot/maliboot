@@ -16,6 +16,8 @@
         "maliboot/di": "*",
         "maliboot/lombok": "*",
         "maliboot/dto": "*",
+        "maliboot/api-annotation": "*",
+        "maliboot/utils": "*",
         "hyperf/paginator": "^3.0"
     },
     "autoload": {

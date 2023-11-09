@@ -9,8 +9,9 @@ use Hyperf\Contract\Jsonable;
 use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Utils\Arr;
+use InvalidArgumentException;
 use MaliBoot\ApiAnnotation\ApiParam;
-use MaliBoot\Dto\AbstractDTO;
+use MaliBoot\Dto\DTOUtil;
 use MaliBoot\Dto\UserContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -56,7 +57,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
         return false;
     }
 
-    protected function initDTO(string $className): AbstractDTO
+    protected function initDTO(string $className): object
     {
         $request = $this->container->get(RequestInterface::class);
 
@@ -70,7 +71,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
         return $dto;
     }
 
-    protected function fillUserToDTO(RequestInterface $request, AbstractDTO $dto): AbstractDTO
+    protected function fillUserToDTO(RequestInterface $request, object $dto): object
     {
         if (empty($user = $request->getAttribute('user'))) {
             return $dto;
@@ -86,7 +87,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
                 $user = $user->toArray();
             }
 
-            $userContext->setProperties((array) $user);
+            $userContext->ofData((array) $user);
         } else {
             $userContext = $user;
         }
@@ -109,7 +110,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
     private function getInjections(array $definitions, string $callableName, array $arguments): array
     {
         $injections = [];
-        foreach ($definitions ?? [] as $pos => $definition) {
+        foreach ($definitions as $pos => $definition) {
             $value = $arguments[$pos] ?? $arguments[$definition->getMeta('name')] ?? null;
             $type = $definition->getName();
             $name = $definition->getMeta('name');
@@ -119,7 +120,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
                     $injections[] = $definition->getMeta('defaultValue');
                 } elseif ($definition->allowsNull()) {
                     $injections[] = null;
-                } elseif (is_subclass_of($type, AbstractDTO::class)) {
+                } elseif (DTOUtil::isDTO($type)) {
                     $injections[] = $this->initDTO($type);
                 } elseif ($this->container->has($type)) {
                     $instance = $this->container->get($type);
@@ -128,7 +129,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
                     $request = $this->container->get(RequestInterface::class);
                     $injections[] = $this->convertType(Arr::get($request->all(), $name), $type);
                 } else {
-                    throw new \InvalidArgumentException("Parameter '{$definition->getMeta('name')}' "
+                    throw new InvalidArgumentException("Parameter '{$definition->getMeta('name')}' "
                         . "of {$callableName} should not be null");
                 }
             } else {

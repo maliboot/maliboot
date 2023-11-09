@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MaliBoot\Cola\Client\Constants;
 
+/**
+ * @deprecated ...
+ */
 class FieldRelationType
 {
     public const ASSOCIATION = 'association';

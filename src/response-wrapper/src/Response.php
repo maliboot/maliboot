@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace MaliBoot\ResponseWrapper;
 
 use MaliBoot\Utils\Contract\Arrayable;
-use MaliBoot\Utils\Traits\SetPropertiesTrait;
 
 abstract class Response
 {
-    use SetPropertiesTrait;
-
     protected bool $success = true;
 
     protected int $errCode = 0;

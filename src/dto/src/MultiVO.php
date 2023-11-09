@@ -8,6 +8,7 @@ use ArrayAccess;
 use Hyperf\Contract\Arrayable;
 use Hyperf\Contract\Jsonable;
 use IteratorAggregate;
+use MaliBoot\Dto\Annotation\ViewObject;
 
 /**
  * @template TKey of array-key
@@ -17,6 +18,7 @@ use IteratorAggregate;
  * @implements Arrayable<TKey, TValue>
  * @implements IteratorAggregate<TKey, TValue>
  */
+#[ViewObject]
 class MultiVO implements \ArrayAccess, Arrayable, \IteratorAggregate, Jsonable, \JsonSerializable
 {
     /**

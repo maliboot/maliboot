@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace MaliBoot\Dto;
 
+use MaliBoot\Dto\Annotation\ViewObject;
 use MaliBoot\Utils\Collection;
 use MaliBoot\Utils\Contract\Arrayable;
 
 /**
  * @template T
  */
+#[ViewObject]
 class PageVO
 {
     /**
