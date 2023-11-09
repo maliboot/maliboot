@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MaliBoot\Devtool;
+namespace MaliBoot\Devtool\Upgrade;
 
 use Hyperf\Command\Annotation\Command;
 use Hyperf\Command\Command as HyperfCommand;
