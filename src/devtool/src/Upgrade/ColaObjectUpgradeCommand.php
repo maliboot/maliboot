@@ -183,7 +183,7 @@ class ColaObjectUpgradeCommand extends HyperfCommand
 
             protected function visitClassMethod(ClassMethod $classMethod): void {}
 
-            protected function visitClassAttribute(AttributeGroup $attributeGroup): ?AttributeGroup
+            protected function visitClassAttribute(Class_ $class_, AttributeGroup $attributeGroup): ?AttributeGroup
             {
                 $attrGroupName = $attributeGroup->attrs[0]->name->toString();
 
@@ -197,6 +197,19 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                         )];
                     } else {
                         $attributeGroup->attrs[0]->args = [];
+                    }
+                }
+
+                // DataTransferObject-page升级为query-page
+                $extendName = $class_->extends?->toString();
+                if ($attrGroupName === 'DataTransferObject' && $extendName === 'AbstractPageQuery') {
+
+                    foreach ($attributeGroup->attrs[0]->args as &$arg) {
+                        if ($arg->name->toString() !== 'type') {
+                            continue;
+                        }
+
+                        $arg->value = new Node\Scalar\String_("query-page");
                     }
                 }
 
@@ -233,7 +246,7 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                     $attrGroupName = $attrGroup->attrs[0]->name->toString();
                     isset($objectAttributes[$attrGroupName]) && $filterAttributes[] = $objectAttributes[$attrGroupName];
 
-                    $newAttr = $this->visitClassAttribute($attrGroup);
+                    $newAttr = $this->visitClassAttribute($class_, $attrGroup);
                     $newAttr !== null && $newAttrGroup[] = $newAttr;
                 }
                 if (empty($filterAttributes)) {
