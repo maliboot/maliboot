@@ -37,7 +37,7 @@ class QueryDTOGenerator extends AbstractClassVisitor
         $reflectionAttribute = $this->reflectionClass->getAttributes(QueryDTOAnnotationInterface::class, ReflectionAttribute::IS_INSTANCEOF)[0];
         /** @var QueryDTOAnnotationInterface $attribute */
         $attribute = $reflectionAttribute->newInstance();
-        if ($attribute->getType() === 'query') {
+        if ($attribute->getType() === 'query-page') {
             return true;
         }
 

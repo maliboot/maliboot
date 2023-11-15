@@ -6,6 +6,7 @@ namespace MaliBoot\Dto\Annotation;
 
 use Attribute;
 use Hyperf\Di\Annotation\AbstractAnnotation;
+use JetBrains\PhpStorm\ExpectedValues;
 use MaliBoot\Dto\Constants\ContentType;
 use MaliBoot\Dto\Constants\RequestParameterLocation;
 use MaliBoot\Dto\Contract\BaseDTOAnnotationInterface;
@@ -20,7 +21,7 @@ class DataTransferObject extends AbstractAnnotation implements BaseDTOAnnotation
     public function __construct(
         public string $name = '',
         public string $desc = '',
-        public string $type = '',
+        #[ExpectedValues(['command', 'query', 'query-page'])] public string $type = '',
         public string $in = RequestParameterLocation::BODY,
         public string $contentType = ContentType::WWW_FORM_URLENCODED,
         public ?string $getterSetterDelegate = null,
