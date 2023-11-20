@@ -190,14 +190,21 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                 // DataObject升级为Database
                 if ($attrGroupName === 'DataObject') {
                     $attributeGroup->attrs[0]->name = new Name('Database');
+
+                    $databaseArgs = array_reduce($attributeGroup->attrs[0]->args, function ($carry, Node\Arg $item) {
+                        if ($item->name->toString() === 'table') {
+                            $carry[] = $item;
+                        }
+                        return $carry;
+                    }, []);
+
                     if (isset($this->getTraitUseNames()['SoftDeletes'])) {
-                        $attributeGroup->attrs[0]->args = [new Node\Arg(
+                        $databaseArgs[] = new Node\Arg(
                             value: new Node\Expr\ConstFetch(new Name('true')),
                             name: new Node\Identifier('softDeletes')
-                        )];
-                    } else {
-                        $attributeGroup->attrs[0]->args = [];
+                        );
                     }
+                    $attributeGroup->attrs[0]->args = $databaseArgs;
                 }
 
                 // DataTransferObject-page升级为query-page
