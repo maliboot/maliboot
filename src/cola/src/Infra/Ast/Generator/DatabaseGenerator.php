@@ -58,7 +58,10 @@ CODE;
 
         $className = $this->reflectionClass->getName();
         $className = \Hyperf\Collection\last(explode('\\', $className));
-        $className = trim($className, 'DO');
+        $classNameLen = strlen($className);
+        if ($classNameLen > 2 && $className[$classNameLen - 2] === 'D' && $className[$classNameLen - 1] === 'O') {
+            $className = substr($className, 0, $classNameLen - 2);
+        }
         return Str::snake($className);
     }
 
