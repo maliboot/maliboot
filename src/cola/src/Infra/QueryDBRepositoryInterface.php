@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MaliBoot\Cola\Infra;
 
-use MaliBoot\Dto\AbstractPageQuery;
 use MaliBoot\Dto\PageVO;
 use MaliBoot\Utils\Collection;
 
@@ -47,7 +46,7 @@ interface QueryDBRepositoryInterface extends QueryRepositoryInterface
      *
      * @return PageVO 分页数据
      */
-    public function listByPage(AbstractPageQuery $pageQuery): PageVO;
+    public function listByPage(mixed $pageQuery): PageVO;
 
     /**
      * 获取总数.

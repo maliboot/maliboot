@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MaliBoot\Dto\Ast\Generator;
 
-use MaliBoot\Dto\AbstractPageQuery;
 use MaliBoot\Dto\Contract\QueryDTOAnnotationInterface;
 use MaliBoot\Lombok\Annotation\LombokGenerator;
 use MaliBoot\Lombok\Ast\AbstractClassVisitor;
@@ -26,10 +25,6 @@ class QueryDTOGenerator extends AbstractClassVisitor
     protected function enable(): bool
     {
         if (! parent::enable()) {
-            return false;
-        }
-
-        if (is_subclass_of($this->reflectionClass->getName(), AbstractPageQuery::class)) {
             return false;
         }
 
