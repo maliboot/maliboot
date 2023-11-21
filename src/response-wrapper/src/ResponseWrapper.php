@@ -10,9 +10,9 @@ use Hyperf\Contract\Jsonable;
 use Hyperf\HttpMessage\Server\Response;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use MaliBoot\Database\Contract\ResponseDbQueryDebug;
-use MaliBoot\Dto\AbstractViewObject;
 use MaliBoot\Dto\EmptyVO;
 use MaliBoot\Dto\PageVO;
+use MaliBoot\Dto\DTOUtil;
 use MaliBoot\ResponseWrapper\Contract\ResponseWrapperInterface;
 use MaliBoot\Utils\Collection;
 use Psr\Http\Message\ResponseInterface;
@@ -21,24 +21,15 @@ use Psr\Http\Message\ServerRequestInterface;
 class ResponseWrapper implements ResponseWrapperInterface
 {
     /**
-     * @param null|AbstractViewObject|array|Arrayable|Jsonable|string $response
+     * @param null|array|Arrayable|Jsonable|string $response
      */
     public function handle($response, ServerRequestInterface $request)
     {
-        if (! is_null($response) && ! $this->isVO($response)) {
+        if (! is_null($response) && ! DTOUtil::isVO($response)) {
             return $response;
         }
 
-        if ($response instanceof PageVO) {
-            $data = PageResponse::of($response);
-        } elseif ($response instanceof Collection && $response[0] instanceof AbstractViewObject) {
-            $data = MultiResponse::of($response);
-        } elseif (is_null($response) || $response instanceof EmptyVO) {
-            $data = SingleResponse::buildSuccess();
-        } else {
-            $data = SingleResponse::of($response);
-        }
-
+        $data = $this->getResponseData($response);
         $responseServer = $this->response();
         if (config('app_debug', false) && config('app_env', 'production') !== 'production') {
             /** @var Response $responseServer */
@@ -52,14 +43,19 @@ class ResponseWrapper implements ResponseWrapperInterface
             ->withBody(new SwooleStream((string) $data));
     }
 
-    protected function isVO($response): bool
+    protected function getResponseData($response): \MaliBoot\ResponseWrapper\Response
     {
-        return $response instanceof PageVO
-            || $response instanceof AbstractViewObject
-            || ($response instanceof Collection && $response[0] instanceof AbstractViewObject)
-            || (is_array($response) && isset($response[0]) && $response[0] instanceof AbstractViewObject)
-            || ($response instanceof Arrayable && $response[0] instanceof AbstractViewObject)
-            || ($response instanceof \MaliBoot\Utils\Contract\Arrayable && $response[0] instanceof AbstractViewObject);
+        if ($response instanceof PageVO) {
+            $data = PageResponse::of($response);
+        } elseif ($response instanceof Collection && DTOUtil::isCollectionVO($response)) {
+            $data = MultiResponse::of($response);
+        } elseif (is_null($response) || $response instanceof EmptyVO) {
+            $data = SingleResponse::buildSuccess();
+        } else {
+            $data = SingleResponse::of($response);
+        }
+
+        return $data;
     }
 
     /**
