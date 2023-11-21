@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace MaliBoot\Dto\Contract;
 
-use MaliBoot\Lombok\Contract\ArrayObjectAnnotationInterface;
-use MaliBoot\Lombok\Contract\ToCollectionAnnotationInterface;
+use MaliBoot\Lombok\Contract\LombokAnnotationInterface;
 
-interface StructureObjectAnnotationInterface extends ArrayObjectAnnotationInterface, ToCollectionAnnotationInterface, IsPropertyInitAnnotationInterface, MagicToStringAnnotationInterface
+interface StructureObjectAnnotationInterface extends LombokAnnotationInterface, IsPropertyInitAnnotationInterface
 {
 }

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace MaliBoot\Dto\Ast\Generator;
+namespace MaliBoot\Lombok\Ast\Generator;
 
-use MaliBoot\Dto\Contract\MagicToStringAnnotationInterface;
 use MaliBoot\Lombok\Annotation\LombokGenerator;
 use MaliBoot\Lombok\Ast\AbstractClassVisitor;
+use MaliBoot\Lombok\Contract\ToStringAnnotationInterface;
 
 #[LombokGenerator]
-class MagicToStringGenerator extends AbstractClassVisitor
+class ToStringGenerator extends AbstractClassVisitor
 {
     protected function getClassMemberName(): string
     {
@@ -18,7 +18,7 @@ class MagicToStringGenerator extends AbstractClassVisitor
 
     protected function getAnnotationInterface(): string
     {
-        return MagicToStringAnnotationInterface::class;
+        return ToStringAnnotationInterface::class;
     }
 
     protected function getClassCodeSnippet(): string
@@ -37,5 +37,12 @@ class Context {
     }
 }
 CODE;
+    }
+
+    protected function getImpls(): array
+    {
+        return [
+            \Hyperf\Contract\Jsonable::class,
+        ];
     }
 }
