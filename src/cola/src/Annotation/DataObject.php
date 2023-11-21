@@ -10,10 +10,13 @@ use MaliBoot\Cola\Infra\Ast\Generator\ToEntityAnnotationInterface;
 use MaliBoot\Dto\Contract\StructureObjectAnnotationInterface;
 use MaliBoot\Lombok\Contract\GetterAnnotationInterface;
 use MaliBoot\Lombok\Contract\SetterAnnotationInterface;
+use MaliBoot\Lombok\Log\LoggerAnnotationTrait;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class DataObject extends AbstractAnnotation implements StructureObjectAnnotationInterface, ToEntityAnnotationInterface, OfEntityAnnotationInterface
 {
+    use LoggerAnnotationTrait;
+
     /**
      * @param ?string $getterSetterDelegate GetterSetter委托类<div><p>默认为null，无委托</p><p>委托类需要实现<a href='psi_element://\MaliBoot\Lombok\Contract\GetterSetterDelegateInterface'>GetterSetterDelegateInterface</a></p></div>
      */

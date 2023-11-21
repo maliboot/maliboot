@@ -9,10 +9,13 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
 use MaliBoot\Cola\Infra\Ast\Generator\DatabaseAnnotationInterface;
 use MaliBoot\Cola\Infra\DODatabaseCastsAttributes;
 use MaliBoot\Cola\Infra\DODatabaseFieldDelegate;
+use MaliBoot\Lombok\Log\LoggerAnnotationTrait;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 class Database extends AbstractAnnotation implements DatabaseAnnotationInterface
 {
+    use LoggerAnnotationTrait;
+
     /**
      * <h3>数据库ORM委托.</h3>
      * <p>-注：本类默认将所有逻辑，全权委托于 <a href='psi_element://\MaliBoot\Cola\Infra\AbstractModelDelegate'>AbstractModelDelegate</a> 处理</p>
