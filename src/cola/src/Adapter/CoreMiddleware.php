@@ -11,7 +11,7 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Utils\Arr;
 use InvalidArgumentException;
 use MaliBoot\ApiAnnotation\ApiParam;
-use MaliBoot\Dto\DTOUtil;
+use MaliBoot\Utils\ObjectUtil;
 use MaliBoot\Dto\UserContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -120,7 +120,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
                     $injections[] = $definition->getMeta('defaultValue');
                 } elseif ($definition->allowsNull()) {
                     $injections[] = null;
-                } elseif (DTOUtil::isDTO($type)) {
+                } elseif (ObjectUtil::isDTO($type)) {
                     $injections[] = $this->initDTO($type);
                 } elseif ($this->container->has($type)) {
                     $instance = $this->container->get($type);

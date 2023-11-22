@@ -12,7 +12,7 @@ use Hyperf\HttpMessage\Stream\SwooleStream;
 use MaliBoot\Database\Contract\ResponseDbQueryDebug;
 use MaliBoot\Dto\EmptyVO;
 use MaliBoot\Dto\PageVO;
-use MaliBoot\Dto\DTOUtil;
+use MaliBoot\Utils\ObjectUtil;
 use MaliBoot\ResponseWrapper\Contract\ResponseWrapperInterface;
 use MaliBoot\Utils\Collection;
 use Psr\Http\Message\ResponseInterface;
@@ -25,7 +25,7 @@ class ResponseWrapper implements ResponseWrapperInterface
      */
     public function handle($response, ServerRequestInterface $request)
     {
-        if (! is_null($response) && ! DTOUtil::isVO($response)) {
+        if (! is_null($response) && ! ObjectUtil::isVO($response)) {
             return $response;
         }
 
@@ -47,7 +47,7 @@ class ResponseWrapper implements ResponseWrapperInterface
     {
         if ($response instanceof PageVO) {
             $data = PageResponse::of($response);
-        } elseif ($response instanceof Collection && DTOUtil::isCollectionVO($response)) {
+        } elseif ($response instanceof Collection && ObjectUtil::isCollectionVO($response)) {
             $data = MultiResponse::of($response);
         } elseif (is_null($response) || $response instanceof EmptyVO) {
             $data = SingleResponse::buildSuccess();
