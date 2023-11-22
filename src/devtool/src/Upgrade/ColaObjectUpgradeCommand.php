@@ -192,7 +192,7 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                     $attributeGroup->attrs[0]->name = new Name('Database');
 
                     $databaseArgs = array_reduce($attributeGroup->attrs[0]->args, function ($carry, Node\Arg $item) {
-                        if ($item->name->toString() === 'table') {
+                        if ($item->name->toString() === 'table' || $item->name->toString() === 'connection') {
                             $carry[] = $item;
                         }
                         return $carry;
