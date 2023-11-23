@@ -136,6 +136,9 @@ class ColaObjectUpgradeCommand extends HyperfCommand
             private function insertUses(): array
             {
                 return [
+                    new Use_([
+                        new Node\Stmt\UseUse(new Name("MaliBoot\Lombok\Contract\WeakSetterInterface"))
+                    ])
                 ];
             }
 
@@ -273,7 +276,7 @@ class ColaObjectUpgradeCommand extends HyperfCommand
 
                 $class_->attrGroups = $newAttrGroup;
                 $class_->extends = null;
-                $class_->implements = [];
+                $class_->implements = [new Name('WeakSetterInterface')];
 
                 $oldDocStr = $class_->getDocComment()?->getText();
                 if (!empty($oldDocStr)) {
