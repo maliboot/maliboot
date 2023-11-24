@@ -15,7 +15,6 @@ class DebugMethod extends AbstractIDE
         $classFQN = $request->input('classFQN');
         $methodName = $request->input('methodName');
         $parameters = $request->input('parameters');
-        dump($request->all());
         if (!$classFQN || !$methodName || !$parameters) {
             return $this->response('请求错误', 400);
         }
