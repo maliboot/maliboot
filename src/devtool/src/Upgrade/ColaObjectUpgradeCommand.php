@@ -135,11 +135,17 @@ class ColaObjectUpgradeCommand extends HyperfCommand
              */
             private function insertUses(): array
             {
-                return [
+                $data = [
                     new Use_([
                         new Node\Stmt\UseUse(new Name("MaliBoot\Lombok\Contract\WeakSetterInterface"))
-                    ])
+                    ]),
                 ];
+                if (str_contains($this->class_->name->name, 'DO')) {
+                    $data[] = new Use_([
+                        new Node\Stmt\UseUse(new Name("MaliBoot\Cola\Annotation\ORM"))
+                    ]);
+                }
+                return $data;
             }
 
             protected function visitUse(Use_ $use_): ?Use_
@@ -246,6 +252,17 @@ class ColaObjectUpgradeCommand extends HyperfCommand
 
             protected function visitClass(Class_ $class_): void
             {
+                $myProperties = $class_->getProperties();
+                $fields = [];
+                foreach ($myProperties as $myProperty) {
+                    $myPropertyName = $myProperty->props[0]->name->name;
+                    $fields[strtolower($myPropertyName)] = 1;
+                }
+
+                if (count($myProperties) != count($fields)) {
+                    throw new \Exception(sprintf('类属性名称可能重复，请选更正:%s,%s', $class_->namespacedName?->toString() ?? '', $class_->name->name));
+                }
+
                 $objectAttributes = [
                     'DataObject' => 1, 'DataTransferObject' => 1, 'ViewObject' => 1, 'AggregateRoot' => 1, 'ValueObject' => 1, 'Entity' => 1,
                 ];
@@ -298,8 +315,25 @@ class ColaObjectUpgradeCommand extends HyperfCommand
 
             protected function visitProperty(Property $property): void
             {
+                $newAttrGroups = [];
                 foreach ($property->attrGroups as $attrGroup) {
                     $attributeName = $attrGroup->attrs[0]->name->toString();
+                    if ($attributeName === 'Column' && empty($newAttrGroups)) {
+                        $propertyFieldStr = $this->getAttributeArgValByName($attrGroup, 'name');
+                        foreach (explode('_', $propertyFieldStr) as $item) {
+                            if (ctype_upper($item[0])) {
+                                $newAttrGroups = [
+                                    new AttributeGroup([new Node\Attribute(new Node\Name('ORM'), [
+                                        new Node\Arg(
+                                            value: new Node\Scalar\String_($propertyFieldStr), name: new Node\Identifier('name'))
+                                    ])]),
+                                ];
+                                break;
+                            }
+                        }
+                    }
+
+
                     $attributeArgName = match ($attributeName) {
                         'Column' => 'desc',
                         'Field' => 'name',
@@ -315,7 +349,7 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                         break;
                     }
                 }
-                $property->attrGroups = [];
+                $property->attrGroups = $newAttrGroups;
             }
         });
 
