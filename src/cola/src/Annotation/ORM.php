@@ -6,9 +6,10 @@ namespace MaliBoot\Cola\Annotation;
 
 use Attribute;
 use MaliBoot\Lombok\Contract\OfAnnotationInterface;
+use MaliBoot\Lombok\Contract\ToArrayAnnotationInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class ORM implements OfAnnotationInterface
+class ORM implements OfAnnotationInterface, ToArrayAnnotationInterface
 {
     /**
      * Laravel-ORM 管理，如字段映射、模型关系定义、模型事件......
