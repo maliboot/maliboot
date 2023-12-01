@@ -20,6 +20,11 @@ abstract class AbstractModelDelegate extends Model
                 continue;
             }
             $doClassName = $model->delegatedSource();
+            if (! empty($model->concernFields)) {
+                foreach ($model->concernFields as $concernField) {
+                    $model->load($concernField);
+                }
+            }
             $model = (new $doClassName())->setMyDelegate($model)->ofData($model->toArray());
         }
         return new Collection($models);

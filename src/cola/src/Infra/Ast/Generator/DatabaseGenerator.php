@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace MaliBoot\Cola\Infra\Ast\Generator;
 
 use Hyperf\Stringable\Str;
+use MaliBoot\Cola\Annotation\ORM;
 use MaliBoot\Lombok\Annotation\LombokGenerator;
 use MaliBoot\Lombok\Ast\Generator\DelegateGenerator;
+use MaliBoot\Utils\ObjectUtil;
 use ReflectionAttribute;
 
 #[LombokGenerator]
 class DatabaseGenerator extends DelegateGenerator
 {
+    private array $concernFields = [];
+
     protected function getClassMemberName(): string
     {
         return '_database';
@@ -32,21 +36,63 @@ class DatabaseGenerator extends DelegateGenerator
         $uses = $this->getUses($attribute);
         $fillable = [];
         $casts = [];
+        $concernFields = [];
+        $concernMethods = '';
         foreach ($this->reflectionClass->getProperties() as $reflectionProperty) {
+            $ormList = $reflectionProperty->getAttributes(ORM::class, ReflectionAttribute::IS_INSTANCEOF);
+            $ormArgs = empty($ormList) ? [] : $ormList[0]->getArguments();
             $fieldName = Str::snake($reflectionProperty->getName());
+            $isORMField = true;
+
+            // 模型关联
+            $relatedModel = $this->getTypeFirstPClass($this->getPropertyType($reflectionProperty));
+            if ($relatedModel !== null && ObjectUtil::isDataObject($relatedModel) && ! empty($ormArgs['concern'])) {
+                $isORMField = false;
+                $concernArgsCode = match ($ormArgs['concern']) {
+                    'hasOne', 'hasMany', 'belongsTo' => sprintf('"%s", "%s"', $relatedModel, $ormArgs['foreignKey'] ?? null),
+                    'belongsToMany' => sprintf('"%s", "%s", "%s", "%s"', $relatedModel, $ormArgs['pivotTable'] ?? null, $ormArgs['foreignKey'] ?? null, $ormArgs['pivotForeignKey'] ?? null),
+                    default => null,
+                };
+                $concernArgsCode && $concernFields[] = $fieldName;
+                $concernArgsCode && $concernMethods .= <<<CONCERNS
+
+public function {$fieldName}()
+{
+    return \$this->{$ormArgs['concern']}({$concernArgsCode});
+}
+CONCERNS;
+            }
+            // fillable填充
             $fillable[] = $fieldName;
-            $casts[$fieldName] = $castsAttrs;
+            if ($isORMField) {
+                // cast填充
+                $casts[$fieldName] = $ormArgs['cast'] ?? $castsAttrs;
+            }
         }
         $fillableStr = var_export($fillable, true);
         $castsStr = var_export($casts, true);
+        $concernFieldsStr = var_export($concernFields, true);
+        $this->concernFields = $concernFields;
 
         return <<<CODE
 protected ?string \$table = '{$table}';
 protected ?string \$connection = '{$connect}';
 protected array \$fillable = {$fillableStr};
 protected array \$casts = {$castsStr};
+public array \$concernFields = {$concernFieldsStr};
 use {$uses};
+
+{$concernMethods}
 CODE;
+    }
+
+    protected function getDelegateInsStmts(): string
+    {
+        $result = '';
+        if (! empty($this->concernFields)) {
+            $result .= sprintf('$delegateIns->with(%s);', var_export($this->concernFields, true));
+        }
+        return $result;
     }
 
     protected function getTable(DatabaseAnnotationInterface $attribute): string
@@ -86,5 +132,34 @@ CODE;
         $reflectionAttribute = $this->reflectionClass->getAttributes(DatabaseAnnotationInterface::class, ReflectionAttribute::IS_INSTANCEOF)[0];
         /* @var DatabaseAnnotationInterface $attribute */
         return $reflectionAttribute->newInstance();
+    }
+
+    private function getConcerns(): string
+    {
+        $result = '';
+        foreach ($this->reflectionClass->getProperties() as $property) {
+            $modelClazz = $this->getTypeFirstPClass($this->getPropertyType($property));
+            if ($modelClazz === null) {
+                continue;
+            }
+            if (! ObjectUtil::isDataObject($modelClazz)) {
+                continue;
+            }
+
+            $orms = $property->getAttributes(ORM::class, ReflectionAttribute::IS_INSTANCEOF);
+            if (empty($orm)) {
+                continue;
+            }
+            $ormArgs = $orms[0]->getArguments();
+
+            $result .= <<<CONCERNS
+
+public function {$property->name}()
+{
+    return \$this->hasOne({$modelClazz}, 'user_id', 'id');
+}
+CONCERNS;
+        }
+        return $result;
     }
 }
