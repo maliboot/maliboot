@@ -9,6 +9,7 @@ use Hyperf\Database\Model\Builder;
 use MaliBoot\Cola\Exception\RepositoryException;
 use MaliBoot\Dto\PageVO;
 use MaliBoot\Utils\Collection;
+use MaliBoot\Utils\ObjectUtil;
 
 abstract class AbstractQueryDBRepository extends AbstractDBRepository implements QueryRepositoryInterface, RepositoryCriteriaInterface
 {
@@ -186,7 +187,7 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
     {
         $this->applyCriteria()->applyScope();
 
-        if ($this->do instanceof Builder) {
+        if (ObjectUtil::isDataObject($this->do)) {
             $results = $this->do->get($columns);
         } else {
             $results = $this->do->all($columns);
