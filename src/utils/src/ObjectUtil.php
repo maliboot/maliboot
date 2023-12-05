@@ -8,6 +8,9 @@ use MaliBoot\Cola\Annotation\Entity;
 use MaliBoot\Cola\Annotation\ValueObject;
 use MaliBoot\Dto\Annotation\DataTransferObject;
 use MaliBoot\Dto\Annotation\ViewObject;
+use MaliBoot\Lombok\Contract\OfAnnotationInterface;
+use MaliBoot\Lombok\Contract\ToArrayAnnotationInterface;
+use ReflectionAttribute;
 use ReflectionClass;
 
 class ObjectUtil
@@ -68,6 +71,16 @@ class ObjectUtil
         return self::hasAttribute($clazz, self::$DTOAttributes);
     }
 
+    public static function isOf(string|object $clazz): bool
+    {
+        return self::hasAttribute($clazz, [OfAnnotationInterface::class]);
+    }
+
+    public static function isToArray(string|object $clazz): bool
+    {
+        return self::hasAttribute($clazz, [ToarrayAnnotationInterface::class]);
+    }
+
     public static function isVO(string|object $clazz): bool
     {
         return self::hasAttribute($clazz, self::$VOAttributes);
@@ -89,8 +102,8 @@ class ObjectUtil
             return false;
         }
         $class = new ReflectionClass($clazz);
-        foreach ($class->getAttributes() as $attribute) {
-            if (in_array($attribute->getName(), $filterAttributes)) {
+        foreach ($filterAttributes as $filterAttribute) {
+            if (! empty($class->getAttributes($filterAttribute, ReflectionAttribute::IS_INSTANCEOF))) {
                 return true;
             }
         }
