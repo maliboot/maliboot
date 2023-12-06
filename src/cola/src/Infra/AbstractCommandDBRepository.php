@@ -97,7 +97,7 @@ abstract class AbstractCommandDBRepository extends AbstractDBRepository implemen
     public function insert(array $entities): bool
     {
         $values = array_reduce($entities, function ($carry, $item) {
-            if (method_exists($item, 'toArray') && ! empty($itemData = $item->toArray())) {
+            if (is_object($item) && method_exists($item, 'toArray') && ! empty($itemData = $item->toArray())) {
                 $carry[] = $itemData;
             }
             return $carry;
@@ -115,7 +115,7 @@ abstract class AbstractCommandDBRepository extends AbstractDBRepository implemen
     public function batchUpdate(array $entities): int
     {
         return $this->batchUpdateByIds(array_reduce($entities, function ($carry, $item) {
-            if (method_exists($item, 'toArray')) {
+            if (is_object($item) && method_exists($item, 'toArray')) {
                 $carry[] = $this->getDO()->columnsFormat($item->toArray(), true);
             }
             return $carry;

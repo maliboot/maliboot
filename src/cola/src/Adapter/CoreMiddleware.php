@@ -82,7 +82,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
 
             if ($user instanceof Arrayable
                 || $user instanceof \MaliBoot\Utils\Contract\Arrayable
-                || method_exists($user, 'toArray')
+                || (is_object($user) && method_exists($user, 'toArray'))
             ) {
                 $user = $user->toArray();
             }

@@ -94,6 +94,6 @@ class Collection extends BaseCollection
     {
         return $value instanceof HyperfContract\Arrayable
             || $value instanceof Contract\Arrayable
-            || method_exists($value, 'toArray');
+            || (is_object($value) && method_exists($value, 'toArray'));
     }
 }
