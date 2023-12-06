@@ -80,7 +80,6 @@ trait StructureObjectTrait
     {
         return $data instanceof \Hyperf\Contract\Arrayable
             || $data instanceof Arrayable
-            || $data instanceof \Hyperf\Utils\Contracts\Arrayable
             || (is_object($data) && method_exists($data, 'toArray'));
     }
 

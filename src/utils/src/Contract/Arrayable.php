@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace MaliBoot\Utils\Contract;
 
+use Hyperf\Contract\Arrayable as HyperfArrayable;
+
 /**
  * @template TKey of array-key
  * @template TValue
  */
-interface Arrayable
+interface Arrayable extends HyperfArrayable
 {
-    /**
-     * @return array<TKey, TValue>
-     */
-    public function toArray(): array;
 }
