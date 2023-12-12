@@ -139,6 +139,9 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                     new Use_([
                         new Node\Stmt\UseUse(new Name("MaliBoot\Lombok\Contract\WeakSetterInterface"))
                     ]),
+                    new Use_([
+                        new Node\Stmt\UseUse(new Name("MaliBoot\Lombok\Annotation\Of"))
+                    ]),
                 ];
                 if (str_contains($this->class_->name->name, 'DO')) {
                     $data[] = new Use_([
@@ -306,6 +309,9 @@ class ColaObjectUpgradeCommand extends HyperfCommand
             {
                 foreach ($attributeGroup->attrs[0]->args as $arg) {
                     if ($arg->name->toString() === $name) {
+                        if ($arg->value instanceof Node\Expr\ClassConstFetch) {
+                            return $arg->value->class->toString();
+                        }
                         return $arg->value->value;
                     }
                 }
@@ -316,6 +322,7 @@ class ColaObjectUpgradeCommand extends HyperfCommand
             protected function visitProperty(Property $property): void
             {
                 $newAttrGroups = [];
+                $newOfAttrGroups = [];
                 foreach ($property->attrGroups as $attrGroup) {
                     $attributeName = $attrGroup->attrs[0]->name->toString();
                     if ($attributeName === 'Column' && empty($newAttrGroups)) {
@@ -332,7 +339,17 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                             }
                         }
                     }
-
+                    $type = $this->getAttributeArgValByName($attrGroup, 'type');
+                    $ref = $this->getAttributeArgValByName($attrGroup, 'ref');
+                    if ($attributeName === 'Field' && $type === 'array' && $ref !== '' && empty($newOfAttrGroups)) {
+                        $refValue = ctype_upper($ref[0]) ? new Node\Expr\ClassConstFetch(new Node\Name($ref), new Node\Identifier('class')) : new Node\Scalar\String_($ref);
+                        $newOfAttrGroups = [
+                            new AttributeGroup([new Node\Attribute(new Node\Name('Of'), [
+                                new Node\Arg(
+                                    value: $refValue, name: new Node\Identifier('arrayValue'))
+                            ])]),
+                        ];
+                    }
 
                     $attributeArgName = match ($attributeName) {
                         'Column' => 'desc',
@@ -349,7 +366,7 @@ class ColaObjectUpgradeCommand extends HyperfCommand
                         break;
                     }
                 }
-                $property->attrGroups = $newAttrGroups;
+                $property->attrGroups = [...$newAttrGroups, ...$newOfAttrGroups];
             }
         });
 
