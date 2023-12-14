@@ -102,13 +102,19 @@ abstract class AbstractDBRepository
                     $value = [$valueField, QueryConnector::OPERATOR_EQ->value, $value[$valueField]];
                 }
                 if (! isset($value[2])) {
-                    $value = [$value[0], QueryConnector::OPERATOR_EQ->value, $value[1]];
+                    if (strtoupper((string) $value[1]) === 'RAW') {
+                        $value[2] = [];
+                    } else {
+                        $value = [$value[0], QueryConnector::OPERATOR_EQ->value, $value[1]];
+                    }
                 }
                 [$field, $condition, $val] = $value;
                 if ($condition instanceof QueryConnector) {
                     $condition = $condition->value;
                 }
-                $field = Str::snake($field);
+                if (! (is_string($condition) && strtoupper($condition) === 'RAW')) {
+                    $field = Str::snake($field);
+                }
                 // smooth input
                 $condition = preg_replace('/\s\s+/', ' ', trim($condition));
 
@@ -212,7 +218,7 @@ abstract class AbstractDBRepository
                         $do = $do->whereNotBetweenColumns($field, $val);
                         break;
                     case QueryConnector::RAW:
-                        $do = $do->whereRaw($val);
+                        $do = $do->whereRaw($field, $val);
                         break;
                     default:
                         $do = $do->where($field, $condition, $val);
