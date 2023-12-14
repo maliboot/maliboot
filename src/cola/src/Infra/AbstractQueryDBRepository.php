@@ -265,6 +265,10 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
             }
         }
 
+        if (! empty($groupBy = $pageQuery->getGroupBy())) {
+            $this->do = $this->do->groupBy($groupBy);
+        }
+
         // 分页参数
         $perPage = ! empty($pageQuery->getPageSize()) ? $pageQuery->getPageSize() : 1;
         $page = ! empty($pageQuery->getPageIndex()) ? $pageQuery->getPageIndex() : null;
