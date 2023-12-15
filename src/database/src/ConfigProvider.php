@@ -11,14 +11,21 @@ class ConfigProvider
     public function __invoke(): array
     {
         return [
+            'aspects' => [
+                \MaliBoot\Database\Aspect\InjectAspect::class,
+            ],
             'commands' => [
             ],
             'dependencies' => [
             ],
             'listeners' => [
-                DbQueryExecutedDebugListener::class,
             ],
             'annotations' => [
+                'scan' => [
+                    'paths' => [
+                        __DIR__,
+                    ],
+                ],
             ],
             'publish' => [
             ],

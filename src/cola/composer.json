@@ -17,6 +17,7 @@
         "maliboot/lombok": "*",
         "maliboot/dto": "*",
         "maliboot/api-annotation": "*",
+        "maliboot/database": "*",
         "maliboot/utils": "*",
         "hyperf/paginator": "^3.0"
     },

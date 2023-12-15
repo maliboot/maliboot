@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MaliBoot\Cola\Infra\Ast\Generator;
+namespace MaliBoot\Database\Contract;
 
 use MaliBoot\Dto\Contract\StructureObjectAnnotationInterface;
 
-interface DatabaseAnnotationInterface extends StructureObjectAnnotationInterface, ToEntityAnnotationInterface, OfEntityAnnotationInterface
+interface DBAnnotationInterface extends StructureObjectAnnotationInterface
 {
     public function getTable(): ?string;
 

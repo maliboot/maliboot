@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MaliBoot\Cola\Infra;
+namespace MaliBoot\Database;
 
 use Hyperf\Database\Model\Collection;
 use Hyperf\DbConnection\Model\Model;
@@ -20,12 +20,8 @@ abstract class AbstractModelDelegate extends Model
                 continue;
             }
             $doClassName = $model->delegatedSource();
-            if (! empty($model->concernFields)) {
-                foreach ($model->concernFields as $concernField) {
-                    $model->load($concernField);
-                }
-            }
-            $model = (new $doClassName())->setMyDelegate($model)->ofData($model->toArray());
+            $modelData = $model->toArray();
+            $model = (new $doClassName())->setMyDelegate($model)->ofData($modelData);
         }
         return new Collection($models);
     }
@@ -54,6 +50,11 @@ abstract class AbstractModelDelegate extends Model
             $formatValue[$field] = $fieldValue;
         }
         return $formatValue;
+    }
+
+    public function joiningTableSegment(): string
+    {
+        return str_replace('_do', '', parent::joiningTableSegment());
     }
 
     public function createGetId($values, $sequence = null)

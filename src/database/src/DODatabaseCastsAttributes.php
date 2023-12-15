@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MaliBoot\Cola\Infra;
+namespace MaliBoot\Database;
 
 use Hyperf\Contract\CastsAttributes;
 
