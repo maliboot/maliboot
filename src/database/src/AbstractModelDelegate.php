@@ -22,14 +22,21 @@ abstract class AbstractModelDelegate extends Model
                 continue;
             }
             $doClassName = $model->delegatedSource();
+            $modelData = $model->attributesToArray();
             foreach ($model->concerns as $concernField => $doClass) {
                 // avoid circular reference
                 if (! empty($model->withConcerns) && in_array($concernField, $model->withConcerns)) {
-                    $model->load($concernField);
+                    $modelData[$concernField] = $model->{$concernField};
+                    if ($modelData[$concernField] instanceof \Hyperf\Collection\Collection) {
+                        $modelData[$concernField] = $modelData[$concernField]->map(function ($concernModel) {
+                            return $concernModel->getMyDelegate()->attributesToArray();
+                        })->all();
+                    } else {
+                        $modelData[$concernField] = $modelData[$concernField]->getMyDelegate()->attributesToArray();
+                    }
                 }
             }
-
-            $model = (new $doClassName())->setMyDelegate($model)->ofData($model->toArray());
+            $model = (new $doClassName())->setMyDelegate($model)->ofData($modelData);
         }
         return new Collection($models);
     }
