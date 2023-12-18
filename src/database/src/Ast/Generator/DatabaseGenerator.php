@@ -76,6 +76,7 @@ class DatabaseGenerator extends DelegateGenerator
         $concernFieldsStr = var_export($concernFields, true);
         empty($primaryKey) && $primaryKey = ['id', 'int'];
         [$primaryKeyName, $primaryKeyType] = $primaryKey;
+        $withFieldsStr = var_export(array_keys($concernFields), true);
 
         return <<<CODE
 protected ?string \$table = '{$table}';
@@ -85,6 +86,7 @@ protected array \$casts = {$castsStr};
 public array \$concerns = {$concernFieldsStr};
 protected string \$primaryKey = '{$primaryKeyName}';
 protected string \$keyType = '{$primaryKeyType}';
+public array \$withConcerns = {$withFieldsStr};
 use {$uses};
 
 {$concernMethods}
@@ -96,6 +98,12 @@ CODE;
         $fieldName = $reflectionProperty->getName();
         $relatedModel = $this->getTypeFirstPClass($this->getPropertyType($reflectionProperty));
         $nullPrintf = fn ($data) => $data ? "'{$data}'" : 'null';
+        $codePrintf = fn ($concernType, $concernArgsPrintf) => <<<CONCERNS
+public function {$fieldName}()
+{
+    return \$this->{$concernType}({$concernArgsPrintf});
+}
+CONCERNS;
 
         // hasOne
         $hasOne = $reflectionProperty->getAttributes(HasOneAnnotationInterface::class, ReflectionAttribute::IS_INSTANCEOF);
@@ -109,26 +117,7 @@ CODE;
                 $nullPrintf($foreignKey),
                 $nullPrintf($concernIns->hasOneLocalKey()),
             );
-
-            $hasOneMethod = <<<CONCERNS
-
-public function {$fieldName}()
-{
-    return \$this->hasOne({$concernArgsPrintf});
-}
-public function with{$fieldName}()
-{
-    \$data = self::with('{$fieldName}')->find(\$this->{\$this->primaryKey})->first()->{$fieldName};
-    if(\$data === null) {
-        return null;
-    }
-    if(\$data instanceof \\Hyperf\\Collection\\Collection) {
-        return \$data->all();
-    }
-    return \$data;
-}
-CONCERNS;
-            return [$hasOneMethod, $relatedModel];
+            return [$codePrintf('hasOne', $concernArgsPrintf), $relatedModel];
         }
 
         // hasMany
@@ -145,25 +134,7 @@ CONCERNS;
                 $nullPrintf($foreignKey),
                 $nullPrintf($concernIns->hasManyLocalKey()),
             );
-            $hasManyMethod = <<<CONCERNS
-
-public function {$fieldName}()
-{
-    return \$this->hasMany({$concernArgsPrintf});
-}
-public function with{$fieldName}()
-{
-    \$data = self::with('{$fieldName}')->find(\$this->{\$this->primaryKey})->first()->{$fieldName};
-    if(\$data === null) {
-        return null;
-    }
-    if(\$data instanceof \\Hyperf\\Collection\\Collection) {
-        return \$data->all();
-    }
-    return \$data;
-}
-CONCERNS;
-            return [$hasManyMethod, $relatedModel];
+            return [$codePrintf('hasMany', $concernArgsPrintf), $relatedModel];
         }
 
         // belongsTo
@@ -179,25 +150,7 @@ CONCERNS;
                 $nullPrintf($concernIns->belongsToOwnerKey()),
                 $nullPrintf($concernIns->belongsToRelation()),
             );
-            $belongsToMethod = <<<CONCERNS
-
-public function {$fieldName}()
-{
-    return \$this->belongsTo({$concernArgsPrintf});
-}
-public function with{$fieldName}()
-{
-    \$data = self::with('{$fieldName}')->without('group')->find(\$this->{\$this->primaryKey})->first()->{$fieldName};
-    if(\$data === null) {
-        return null;
-    }
-    if(\$data instanceof \\Hyperf\\Collection\\Collection) {
-        return \$data->all();
-    }
-    return \$data;
-}
-CONCERNS;
-            return [$belongsToMethod, $relatedModel];
+            return [$codePrintf('belongsTo', $concernArgsPrintf), $relatedModel];
         }
 
         // belongsToMany
@@ -216,25 +169,7 @@ CONCERNS;
                 $nullPrintf($concernIns->belongsToManyParentKey()),
                 $nullPrintf($concernIns->belongsToManyRelation()),
             );
-            $belongsToManyMethod = <<<CONCERNS
-
-public function {$fieldName}()
-{
-    return \$this->belongsToMany({$concernArgsPrintf});
-}
-public function with{$fieldName}()
-{
-    \$data = self::with('{$fieldName}')->find(\$this->{\$this->primaryKey})->first()->{$fieldName};
-    if(\$data === null) {
-        return null;
-    }
-    if(\$data instanceof \\Hyperf\\Collection\\Collection) {
-        return \$data->all();
-    }
-    return \$data;
-}
-CONCERNS;
-            return [$belongsToManyMethod, $relatedModel];
+            return [$codePrintf('belongsToMany', $concernArgsPrintf), $relatedModel];
         }
 
         return [];
