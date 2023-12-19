@@ -8,7 +8,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\HttpServer\Annotation\Mapping;
 use Hyperf\Logger\LoggerFactory;
-use Hyperf\Utils\ApplicationContext;
+use Hyperf\Context\ApplicationContext;
 use MaliBoot\ApiAnnotation\ApiBody;
 use MaliBoot\ApiAnnotation\ApiController;
 use MaliBoot\ApiAnnotation\ApiHeader;

@@ -6,7 +6,7 @@ namespace MaliBoot\Auth\Guard;
 
 use Hyperf\Context\Context;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\Utils\Str;
+use Hyperf\Stringable\Str;
 use MaliBoot\Auth\Exception\AuthenticationException;
 use MaliBoot\Auth\Exception\UnauthorizedException;
 use MaliBoot\Auth\Traits\GuardHelpers;

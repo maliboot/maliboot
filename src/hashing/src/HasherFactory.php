@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MaliBoot\Hashing;
 
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Utils\Arr;
+use Hyperf\Collection\Arr;
 use MaliBoot\Contract\Hashing\Hasher;
 use Psr\Container\ContainerInterface;
 

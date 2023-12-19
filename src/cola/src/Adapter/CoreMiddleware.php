@@ -8,7 +8,7 @@ use Hyperf\Contract\Arrayable;
 use Hyperf\Contract\Jsonable;
 use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\Utils\Arr;
+use Hyperf\Collection\Arr;
 use InvalidArgumentException;
 use MaliBoot\ApiAnnotation\ApiParam;
 use MaliBoot\Utils\ObjectUtil;

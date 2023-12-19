@@ -7,7 +7,7 @@ namespace MaliBoot\Swagger\Adapter\Web;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Contract\ResponseInterface;
-use Hyperf\Utils\Codec\Json;
+use Hyperf\Codec\Json;
 use MaliBoot\Cola\Adapter\AbstractController;
 use Psr\Http\Message\ResponseInterface as Psr7ResponseInterface;
 

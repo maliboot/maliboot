@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MaliBoot\Utils\Traits;
 
 use Hyperf\Di\ReflectionManager;
-use Hyperf\Utils\Codec\Json;
+use Hyperf\Codec\Json;
 use MaliBoot\Utils\Contract\Arrayable;
 
 /**

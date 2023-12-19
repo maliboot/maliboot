@@ -7,7 +7,7 @@ namespace MaliBoot\Cola\Infra;
 use Hyperf\Database\Model\Concerns\CamelCase;
 use Hyperf\DbConnection\Model\Model as BaseModel;
 use Hyperf\Di\Annotation\AnnotationCollector;
-use Hyperf\Utils\Str;
+use Hyperf\Stringable\Str;
 use MaliBoot\Cola\Annotation\Column;
 use MaliBoot\Cola\Annotation\DataObject;
 use MaliBoot\Cola\Domain\AggregateRootInterface;

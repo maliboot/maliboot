@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MaliBoot\Utils\CodeGen;
 
-use Hyperf\Utils\Str;
+use Hyperf\Stringable\Str;
 use MaliBoot\Utils\Composer;
 
 /**

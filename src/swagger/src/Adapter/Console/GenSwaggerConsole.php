@@ -9,8 +9,8 @@ use Hyperf\Contract\ConfigInterface;
 use Hyperf\HttpServer\Router\DispatcherFactory;
 use Hyperf\HttpServer\Router\Handler;
 use Hyperf\Logger\LoggerFactory;
-use Hyperf\Utils\ApplicationContext;
-use Hyperf\Utils\Str;
+use Hyperf\Context\ApplicationContext;
+use Hyperf\Stringable\Str;
 use MaliBoot\Swagger\SwaggerJson;
 
 /**

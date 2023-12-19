@@ -7,7 +7,7 @@ namespace MaliBoot\Di\Aop;
 use Hyperf\Di\Definition\PropertyHandlerManager;
 use Hyperf\Di\Exception\NotFoundException;
 use Hyperf\Di\ReflectionManager;
-use Hyperf\Utils\ApplicationContext;
+use Hyperf\Context\ApplicationContext;
 use MaliBoot\Di\Annotation\Inject;
 
 class RegisterInjectPropertyHandler

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MaliBoot\Validation;
 
-use Hyperf\Utils\Arr;
-use Hyperf\Utils\Str;
+use Hyperf\Collection\Arr;
+use Hyperf\Stringable\Str;
 use Hyperf\Validation\Contract\PresenceVerifierInterface;
 use Hyperf\Validation\Contract\Rule;
 use Hyperf\Validation\ValidationException;

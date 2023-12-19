@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MaliBoot\Utils\Traits;
 
-use Hyperf\Utils\Arr;
-use Hyperf\Utils\Str;
+use Hyperf\Collection\Arr;
+use Hyperf\Stringable\Str;
 use MaliBoot\FieldCollector\FieldCollector;
 
 /**

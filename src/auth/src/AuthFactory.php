@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MaliBoot\Auth;
 
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Utils\Str;
+use Hyperf\Stringable\Str;
 use MaliBoot\Auth\Guard\JwtGuard;
 use MaliBoot\Contract\Auth\Authenticatable;
 use MaliBoot\Contract\Auth\AuthFactory as AuthFactoryContract;

@@ -6,7 +6,7 @@ namespace MaliBoot\PluginConfig;
 
 use Hyperf\Config\Config;
 use Hyperf\Config\ProviderConfig;
-use Hyperf\Utils\Arr;
+use Hyperf\Collection\Arr;
 use MaliBoot\Utils\File;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Finder\Finder;
