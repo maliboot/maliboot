@@ -6,10 +6,6 @@ namespace MaliBoot\Dto;
 
 use MaliBoot\Dto\Annotation\ViewObject;
 
-/**
- * @method bool getResult() ...
- * @method self setResult(bool $result) ...
- */
 #[ViewObject(name: 'bool')]
 class BoolVO
 {

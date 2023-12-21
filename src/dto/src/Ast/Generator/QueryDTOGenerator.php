@@ -105,9 +105,9 @@ class AbstractPageQuery {
         return $this;
     }
 
-    public function getGroupBy(): string
+    public function getGroupBy(): ?string
     {
-        return $this->groupBy;
+        return $this->groupBy ?? null;
     }
 
     public function setGroupBy(string $groupBy): self
