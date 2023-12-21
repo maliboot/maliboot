@@ -53,9 +53,9 @@ if (! function_exists('di')) {
     /**
      * 获取容器实例
      * @param string $id
-     * @return \Psr\Container\ContainerInterface
+     * @return \Psr\Container\ContainerInterface|mixed
      */
-    function di(?string $id = null): \Psr\Container\ContainerInterface
+    function di(?string $id = null): mixed
     {
         if (is_null($id)) {
             return \Hyperf\Context\ApplicationContext::getContainer();
