@@ -36,8 +36,9 @@ class ClientObject {
         if (! method_exists($vo, 'ofData')) {
             return null;
         }
-        
-        return $vo->ofData($do->toArray());
+        $doData = $do->toArray();
+        (isset($doData[0]) && is_array($doData[0])) && $doData = $doData[0];
+        return $vo->ofData($doData);
     }
 }
 CODE;
