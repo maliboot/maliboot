@@ -68,8 +68,9 @@ class AbstractPageQuery {
         return $this->pageSize;
     }
 
-    public function setPageSize(int $pageSize): self
+    public function setPageSize(int|string $pageSize): self
     {
+        is_string($pageSize) && $pageSize = (int)$pageSize;
         if ($pageSize < 1) {
             $pageSize = self::DEFAULT_PAGE_SIE;
         }
@@ -85,8 +86,9 @@ class AbstractPageQuery {
         return $this->pageIndex;
     }
 
-    public function setPageIndex(int $pageIndex): self
+    public function setPageIndex(int|string $pageIndex): self
     {
+        is_string($pageIndex) && $pageIndex = (int)$pageIndex;
         if ($pageIndex < 1) {
             $pageIndex = 1;
         }
