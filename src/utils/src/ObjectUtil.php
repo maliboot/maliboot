@@ -66,39 +66,62 @@ class ObjectUtil
         return $firstItem;
     }
 
-    public static function isDTO(string|object $clazz): bool
+    public static function isClazzVar(mixed $var) : bool
     {
+        return (is_string($var) && class_exists($var)) || is_object($var);
+    }
+
+    public static function isDTO(mixed $clazz): bool
+    {
+        if (! self::isClazzVar($clazz)) {
+            return false;
+        }
         return self::hasAttribute($clazz, self::$DTOAttributes);
     }
 
-    public static function isOf(string|object $clazz): bool
+    public static function isOf(mixed $clazz): bool
     {
+        if (! self::isClazzVar($clazz)) {
+            return false;
+        }
         return self::hasAttribute($clazz, [OfAnnotationInterface::class]);
     }
 
-    public static function isToArray(string|object $clazz): bool
+    public static function isToArray(mixed $clazz): bool
     {
+        if (! self::isClazzVar($clazz)) {
+            return false;
+        }
         return self::hasAttribute($clazz, [ToarrayAnnotationInterface::class]);
     }
 
-    public static function isVO(string|object $clazz): bool
+    public static function isVO(mixed $clazz): bool
     {
+        if (! self::isClazzVar($clazz)) {
+            return false;
+        }
         return self::hasAttribute($clazz, self::$VOAttributes);
     }
 
-    public static function isDomainObject(string|object $clazz): bool
+    public static function isDomainObject(mixed $clazz): bool
     {
+        if (! self::isClazzVar($clazz)) {
+            return false;
+        }
         return self::hasAttribute($clazz, self::$domainObjectAttributes);
     }
 
-    public static function isDataObject(string|object $clazz): bool
+    public static function isDataObject(mixed $clazz): bool
     {
+        if (! self::isClazzVar($clazz)) {
+            return false;
+        }
         return self::hasAttribute($clazz, self::$dataObjectAttributes);
     }
 
-    public static function hasAttribute(string|object $clazz, array $filterAttributes): bool
+    public static function hasAttribute(mixed $clazz, array $filterAttributes): bool
     {
-        if (is_string($clazz) && ! class_exists($clazz)) {
+        if (! self::isClazzVar($clazz)) {
             return false;
         }
         $class = new ReflectionClass($clazz);
