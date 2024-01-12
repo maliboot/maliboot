@@ -87,7 +87,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
                 $user = $user->toArray();
             }
 
-            $userContext->ofData((array) $user);
+            $userContext->initData((array) $user);
         } else {
             $userContext = $user;
         }
