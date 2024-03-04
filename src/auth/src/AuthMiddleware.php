@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MaliBoot\Auth;
 
+use Hyperf\Context\Context;
 use MaliBoot\Auth\Exception\UnauthorizedException;
 use MaliBoot\Contract\Auth\Authenticatable;
 use MaliBoot\Contract\Auth\AuthFactory;
@@ -28,9 +29,13 @@ class AuthMiddleware implements MiddlewareInterface
         foreach ($this->guards as $name) {
             $guard = $this->auth->guard($name);
 
-            if (! $guard->user() instanceof Authenticatable) {
+            if (! ($user = $guard->user()) instanceof Authenticatable) {
                 throw new UnauthorizedException("Without authorization from {$name} guard", $guard);
             }
+
+            $request = Context::override(ServerRequestInterface::class, function (ServerRequestInterface $request) use ($user){
+                return $request->withAttribute('user', $user);
+            });
         }
 
         return $handler->handle($request);

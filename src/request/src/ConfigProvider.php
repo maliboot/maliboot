@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MaliBoot\Request;
 
-use Hyperf\HttpServer\Request;
-use MaliBoot\Request\Contract\RequestInterface;
+use MaliBoot\Request\Contract\RequestInterface as MaliRequestInterface;
+use Hyperf\HttpServer\Contract\RequestInterface;
 
 class ConfigProvider
 {
@@ -13,6 +13,7 @@ class ConfigProvider
     {
         return [
             'dependencies' => [
+                MaliRequestInterface::class => Request::class,
                 RequestInterface::class => Request::class,
             ],
         ];

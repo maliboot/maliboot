@@ -59,7 +59,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
 
     protected function initDTO(string $className): object
     {
-        $request = $this->container->get(RequestInterface::class);
+        $request = $this->container->get(ServerRequestInterface::class);
 
         if (method_exists($className, 'fromRequest')) {
             return call_user_func([$className, 'fromRequest'], $request);
@@ -71,7 +71,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
         return $dto;
     }
 
-    protected function fillUserToDTO(RequestInterface $request, object $dto): object
+    protected function fillUserToDTO(ServerRequestInterface $request, object $dto): object
     {
         if (empty($user = $request->getAttribute('user'))) {
             return $dto;
