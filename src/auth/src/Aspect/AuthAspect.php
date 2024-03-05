@@ -53,7 +53,7 @@ class AuthAspect extends AbstractAspect
             Context::set(RequestInterface::class, $request);
 
             $arguments = $proceedingJoinPoint->getArguments();
-            if (ObjectUtil::isDTO($arguments[0])) {
+            if (count($arguments) > 0 && ObjectUtil::isDTO($arguments[0])) {
                 $this->fillUserToDTO($user, $arguments[0]);
             }
         }
