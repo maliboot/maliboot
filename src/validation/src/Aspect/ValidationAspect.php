@@ -11,6 +11,7 @@ use Hyperf\Di\Aop\ProceedingJoinPoint;
 use MaliBoot\Cola\Annotation\AppService;
 use MaliBoot\Dto\AbstractCommand;
 use MaliBoot\Validation\Validator;
+use MaliBoot\Utils\ObjectUtil;
 
 #[Aspect]
 class ValidationAspect extends AbstractAspect
@@ -29,7 +30,7 @@ class ValidationAspect extends AbstractAspect
     {
         if ($proceedingJoinPoint->methodName === self::METHOD_NAME) {
             $arguments = $proceedingJoinPoint->getArguments();
-            if (! empty($arguments) && $arguments[0] instanceof AbstractCommand) {
+            if (! empty($arguments) && ObjectUtil::isDTO($arguments[0])) {
                 $this->validated($arguments[0]);
             }
         }
@@ -37,7 +38,7 @@ class ValidationAspect extends AbstractAspect
         return $proceedingJoinPoint->process();
     }
 
-    protected function validated(AbstractCommand $cmd): bool
+    protected function validated($cmd): bool
     {
         $validator = $this->container->get(Validator::class);
         return $validator->validated($cmd);

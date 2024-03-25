@@ -26,7 +26,7 @@ class Validator
         $this->factory = $this->container->get(ValidatorFactory::class);
     }
 
-    public function validated(AbstractCommand $cmdInstance): bool
+    public function validated($cmdInstance): bool
     {
         $annotations = ApiAnnotation::propertyMetadata(get_class($cmdInstance));
 
