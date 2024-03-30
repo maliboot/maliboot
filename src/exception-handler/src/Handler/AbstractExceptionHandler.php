@@ -36,10 +36,6 @@ abstract class AbstractExceptionHandler extends ExceptionHandler
             $errMessage = ErrorCodeCollector::getMessage($errCode);
         }
 
-        if ($this->config->get('app_debug')) {
-            $errMessage = sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile());
-        }
-
         return [$errCode, $errMessage];
     }
 
@@ -58,7 +54,10 @@ abstract class AbstractExceptionHandler extends ExceptionHandler
             if ($errResponse instanceof Response) {
                 $debugSql = $response->getAttribute(ResponseDbQueryDebug::class, []);
             }
-            $errResponse->setDebug(true)->setDebugTrace($trace)->setDebugSql($debugSql);
+            $errResponse->setDebug(true)
+                ->setDebugTrace($trace)
+                ->setDebugSql($debugSql)
+                ->setDebugError(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
         }
 
         $this->stopPropagation();

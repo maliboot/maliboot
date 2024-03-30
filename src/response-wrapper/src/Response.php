@@ -32,6 +32,10 @@ abstract class Response
 
     protected array $debugSql = [];
 
+    protected string $debugErrorKey = 'error';
+
+    protected string $debugError = '';
+
     public function __toString()
     {
         $str = json_encode($this->toArray(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
@@ -47,6 +51,7 @@ abstract class Response
         ];
         if ($this->debug) {
             $result[$this->debugKey] = [
+                $this->debugErrorKey => $this->getDebugError(),
                 $this->debugTraceKey => $this->getDebugTrace(),
                 $this->debugSqlKey => $this->getDebugSql(),
             ];
@@ -109,6 +114,17 @@ abstract class Response
     public function setDebugSql(array $debugSql): static
     {
         $this->debugSql = $debugSql;
+        return $this;
+    }
+
+    public function getDebugError(): array
+    {
+        return $this->debugError;
+    }
+
+    public function setDebugError(string $debugError): static
+    {
+        $this->debugError = $debugError;
         return $this;
     }
 
