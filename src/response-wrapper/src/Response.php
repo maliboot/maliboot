@@ -117,7 +117,7 @@ abstract class Response
         return $this;
     }
 
-    public function getDebugError(): array
+    public function getDebugError(): string
     {
         return $this->debugError;
     }
