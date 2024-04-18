@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MaliBoot\ErrorCode;
 
 use Hyperf\Di\MetadataCollector;
+use Hyperf\Stringable\Str;
 
 class ErrorCodeCollector extends MetadataCollector
 {
@@ -18,7 +19,12 @@ class ErrorCodeCollector extends MetadataCollector
     public static function getMessage(int|string $code): string
     {
         if (static::hasCode($code)) {
-            return static::$container[$code]['message'];
+            // TODO 临时处理方式，后续需要优化
+            $message = static::$container[$code]['message'];
+            if (function_exists('trans') && Str::startsWith($message, 'error.')) {
+                $message = trans($message);
+            }
+            return $message;
         }
 
         return '';
