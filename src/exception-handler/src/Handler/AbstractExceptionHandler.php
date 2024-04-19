@@ -36,7 +36,10 @@ abstract class AbstractExceptionHandler extends ExceptionHandler
         }
 
         if (ErrorCodeCollector::hasCode($errCode)) {
-            $errMessage = ErrorCodeCollector::getMessage($errCode);
+            $message = ErrorCodeCollector::getMessage($errCode);
+            if ($message) {
+                $errMessage = $message;
+            }
         }
 
         return [$errCode, $errMessage];
