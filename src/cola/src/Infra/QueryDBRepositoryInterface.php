@@ -126,4 +126,18 @@ interface QueryDBRepositoryInterface extends QueryRepositoryInterface
      * @return $this
      */
     public function take(int $limit);
+
+    /**
+     * 根据主键修改.
+     * @param array $values 修改内容（必须包含主键KV）
+     * @return bool ...
+     */
+    public function updateById(array $values): bool;
+
+    /**
+     * 批量修改 - case...then...根据主键.
+     * @param array $values 修改数据(必须包含ID)
+     * @return int 影响条数
+     */
+    public function batchUpdateByIds(array $values): int;
 }

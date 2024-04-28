@@ -6,6 +6,7 @@ namespace MaliBoot\Cola\Infra;
 
 use Closure;
 use Hyperf\Database\Model\Builder;
+use Hyperf\DbConnection\Db;
 use Hyperf\Stringable\Str;
 use MaliBoot\Cola\Exception\RepositoryException;
 use MaliBoot\ErrorCode\Constants\ServerErrorCode;
@@ -229,5 +230,71 @@ abstract class AbstractDBRepository
             }
         }
         return $do;
+    }
+
+    /**
+     * 批量修改 - case...then...根据主键.
+     * @param array $values 修改数据(必须包含ID)
+     * @return int 影响条数
+     */
+    public function batchUpdateByIds(array $values): int
+    {
+        if (empty($values)) {
+            return 0;
+        }
+
+        $do = $this->getDO();
+
+        # ksort
+        foreach ($values as &$value) {
+            ksort($value);
+            $value = $do->columnsFormat($value, true);
+        }
+        $tablePrefix = Db::connection($do->getConnectionName())->getTablePrefix();
+        $table = $do->getTable();
+        $primary = $do->getKeyName();
+        $sql = $this->compileBatchUpdateByIds($tablePrefix . $table, $values, $primary);
+
+        return Db::update($sql);
+    }
+
+    /**
+     * Compile batch update Sql.
+     * @param string $table ...
+     * @param array $values ...
+     * @param string $primary ...
+     * @return string update sql
+     */
+    private function compileBatchUpdateByIds(string $table, array $values, string $primary): string
+    {
+        if (! is_array(reset($values))) {
+            $values = [$values];
+        }
+
+        // Take the first value as columns
+        $columns = array_keys(current($values));
+
+        $setStr = '';
+        foreach ($columns as $column) {
+            if ($column === $primary) {
+                continue;
+            }
+
+            $setStr .= " `{$column}` = case `{$primary}` ";
+            foreach ($values as $row) {
+                $value = $row[$column];
+                $rowValue = is_string($value) ? "'{$value}'" : $value;
+
+                $setStr .= " when '{$row[$primary]}' then {$rowValue} ";
+            }
+            $setStr .= ' end,';
+        }
+        // Remove the last character
+        $setStr = substr($setStr, 0, -1);
+
+        $ids = array_column($values, $primary);
+        $idsStr = implode(',', $ids);
+
+        return "update {$table} set {$setStr} where {$primary} in ({$idsStr})";
     }
 }

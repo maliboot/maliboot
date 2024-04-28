@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MaliBoot\Cola\Infra;
 
+use Closure;
 use Hyperf\Contract\PaginatorInterface;
-use Hyperf\Database\Model\Builder;
 use MaliBoot\Cola\Exception\RepositoryException;
 use MaliBoot\Dto\PageVO;
 use MaliBoot\Utils\Collection;
@@ -17,11 +17,13 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
 
     protected bool $skipCriteria = false;
 
-    protected ?\Closure $scopeQuery = null;
+    protected ?Closure $scopeQuery = null;
 
     /**
      * 触发对 DO 的静态方法调用.
      *
+     * @param mixed $method
+     * @param mixed $arguments
      * @return mixed
      */
     public static function __callStatic($method, $arguments)
@@ -32,6 +34,8 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
     /**
      * 触发对 DO 的方法调用.
      *
+     * @param mixed $method
+     * @param mixed $arguments
      * @return mixed
      */
     public function __call($method, $arguments)
@@ -98,6 +102,25 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
         $this->reset();
 
         return $this->parserResult($do);
+    }
+
+    public function updateById(array $values): bool
+    {
+        $do = $this->getDO();
+        $values = $do->columnsFormat($values, true);
+        $primaryKey = $do->getKeyName();
+        if (! isset($values[$primaryKey])) {
+            throw new RepositoryException(500, sprintf(
+                '%s::updateById(array $values)缺失主键[%s]值：%s',
+                $this::class,
+                $primaryKey,
+                json_encode($values)
+            ));
+        }
+
+        $primaryValue = $values[$primaryKey];
+        unset($values[$primaryValue]);
+        return (bool) $do->where($primaryKey, $primaryValue)->update($values);
     }
 
     /**
@@ -319,7 +342,7 @@ abstract class AbstractQueryDBRepository extends AbstractDBRepository implements
      *
      * @return $this
      */
-    public function scopeQuery(\Closure $scope)
+    public function scopeQuery(Closure $scope)
     {
         $this->scopeQuery = $scope;
 

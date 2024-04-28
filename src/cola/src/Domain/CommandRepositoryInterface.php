@@ -17,7 +17,7 @@ interface CommandRepositoryInterface
      * @param object $entity ...
      * @return int ...
      */
-    public function create(object $entity): int;
+    public function create(object|array $entity): int;
 
     /**
      * 单条修改.
@@ -25,14 +25,14 @@ interface CommandRepositoryInterface
      * @return bool ...
      * @throws RepositoryException ...
      */
-    public function update(object $entity): bool;
+    public function update(object|array $entity): bool;
 
     /**
      * 单条保存.
      * @param object $entity ...
      * @return bool|int ...
      */
-    public function save(object $entity): bool|int;
+    public function save(object|array $entity): bool|int;
 
     /**
      * 单条删除.
