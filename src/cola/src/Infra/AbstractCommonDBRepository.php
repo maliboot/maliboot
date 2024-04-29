@@ -16,8 +16,18 @@ class AbstractCommonDBRepository implements QueryDBRepositoryInterface, CommandR
 
     public function __construct()
     {
-        $this->commandDelegate = new class() extends AbstractCommandDBRepository {};
-        $this->queryDelegate = new class() extends AbstractQueryDBRepository {};
+        $this->commandDelegate = new class() extends AbstractCommandDBRepository {
+            public function resetDO(): object
+            {
+                return $this->makeDO();
+            }
+        };
+        $this->queryDelegate = new class() extends AbstractQueryDBRepository {
+            public function resetDO(): object
+            {
+                return $this->makeDO();
+            }
+        };
 
         $do = $this->do();
         $this->commandDelegate->changeDO($do);
