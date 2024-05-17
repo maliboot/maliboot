@@ -9,7 +9,7 @@ return [
     ],
     'guards' => [
         'jwt' => [
-            'driver' => \MaliBoot\Auth\Guard\JwtGuard::class,
+            'driver' => "jwt",
             'provider' => 'user',
             'secret' => env('AUTH_JWT_SECRET'), // jwt 服务端身份标识
             'header_name' => env('JWT_HEADER_NAME', 'Authorization'), // 请求头名称
@@ -27,7 +27,7 @@ return [
     ],
     'providers' => [
         'user' => [
-            'driver' => \MaliBoot\Auth\Provider\RpcUserProvider::class,
+            'provider' => \MaliBoot\Auth\Provider\RpcUserProvider::class,
             'rpc' => \MaliPlugin\User\Client\Api\UserService::class, // 需要实现 MaliBoot\Contract\Auth\Authenticatable 接口
         ],
     ],
