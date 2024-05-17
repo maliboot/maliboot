@@ -22,6 +22,9 @@ class AuthUserInject implements ControllerDispatchEventInterface
     public static function dispatchBefore(CoreMiddleware $coreMiddleware, string $controller, string $action, array $arguments)
     {
         $annotation = self::getAnnotationMetadata($controller, $action);
+        if (empty($annotation->class[Auth::class]) && empty($annotation->method[Auth::class])) {
+            return;
+        }
         /** @var Auth $authAnnotation */
         $authAnnotation = $annotation->class[Auth::class] ?? $annotation->method[Auth::class];
 
