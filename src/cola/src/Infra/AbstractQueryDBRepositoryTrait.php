@@ -261,6 +261,7 @@ trait AbstractQueryDBRepositoryTrait
     /**
      * 根据条件获取分页数据.
      *
+     * @param mixed $pageQuery PageDTO
      * @return PageVO 分页数据
      */
     public function listByPage(mixed $pageQuery): PageVO

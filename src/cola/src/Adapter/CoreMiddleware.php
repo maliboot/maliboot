@@ -11,6 +11,7 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Collection\Arr;
 use InvalidArgumentException;
 use MaliBoot\ApiAnnotation\ApiParam;
+use MaliBoot\Cola\Annotation\ControllerDispatchEvent;
 use MaliBoot\Utils\ObjectUtil;
 use MaliBoot\Dto\UserContext;
 use Psr\Http\Message\ResponseInterface;
@@ -25,6 +26,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
      */
     protected function parseMethodParameters(string $controller, string $action, array $arguments): array
     {
+        $this->parseMethodParametersBefore($controller, $action, $arguments);
         $definitions = $this->getMethodDefinitionCollector()->getParameters($controller, $action);
         return $this->getInjections($definitions, "{$controller}::{$action}", $arguments);
     }
@@ -43,6 +45,18 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
         }
 
         return parent::transferToResponse($response, $request);
+    }
+
+    protected function parseMethodParametersBefore(string $controller, string $action, array $arguments): void
+    {
+        $generatorAnnotationList = AnnotationCollector::getClassesByAnnotation(ControllerDispatchEvent::class);
+        foreach ($generatorAnnotationList as $generatorClassName => $generatorAnnotation) {
+            if (! is_subclass_of($generatorClassName, ControllerDispatchEventInterface::class)) {
+                continue;
+            }
+            $generatorIns = new $generatorClassName();
+            $generatorIns::dispatchBefore($this, $controller, $action, $arguments);
+        }
     }
 
     protected function isAnnotationParam(string $callableName, string $name): bool
