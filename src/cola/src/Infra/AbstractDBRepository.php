@@ -7,7 +7,9 @@ namespace MaliBoot\Cola\Infra;
 use Closure;
 use Hyperf\Database\Model\Builder;
 use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Stringable\Str;
+use MaliBoot\Cola\Client\Dto\Search;
 use MaliBoot\Cola\Exception\RepositoryException;
 use MaliBoot\ErrorCode\Constants\ServerErrorCode;
 
@@ -51,6 +53,32 @@ abstract class AbstractDBRepository
     }
 
     /**
+     * 批量修改 - case...then...根据主键.
+     * @param array $values 修改数据(必须包含ID)
+     * @return int 影响条数
+     */
+    public function batchUpdateByIds(array $values): int
+    {
+        if (empty($values)) {
+            return 0;
+        }
+
+        $do = $this->getDO();
+
+        # ksort
+        foreach ($values as &$value) {
+            ksort($value);
+            $value = $do->columnsFormat($value, true);
+        }
+        $tablePrefix = Db::connection($do->getConnectionName())->getTablePrefix();
+        $table = $do->getTable();
+        $primary = $do->getKeyName();
+        $sql = $this->compileBatchUpdateByIds($tablePrefix . $table, $values, $primary);
+
+        return Db::update($sql);
+    }
+
+    /**
      * @return Builder ...
      */
     protected function makeDO(): mixed
@@ -69,23 +97,48 @@ abstract class AbstractDBRepository
         return $do;
     }
 
+    protected function collectSearchVars(object $classInstance): array
+    {
+        $result = [];
+        $generatorAnnotationList = AnnotationCollector::get(get_class($classInstance) . '._p');
+        // Search::class
+        foreach ($generatorAnnotationList as $generatorFieldName => $generatorAnnotation) {
+            if (! isset($generatorAnnotation[Search::class])) {
+                continue;
+            }
+            $fieldGetterFn = 'get' . ucfirst($generatorFieldName);
+            $fieldValue = method_exists($classInstance, $fieldGetterFn) ? $classInstance->{$fieldGetterFn}() : null;
+            if (empty($fieldValue)) {
+                continue;
+            }
+
+            if ($generatorAnnotation[Search::class]->connector == null) {
+                $generatorAnnotation[Search::class]->connector = QueryConnector::OPERATOR_EQ;
+            }
+
+            $result[] = [$generatorFieldName, $generatorAnnotation[Search::class]->connector, $fieldValue];
+        }
+
+        return $result;
+    }
+
     /**
      * 将给定的 where 条件应用于 DO.
      * @param array $where Sample<code>
      *
-     * $where = ['id' => 1];
-     * $where = ['id', '>',  1];
-     * $where = ['id', '<',  1];
-     * $where = ['id', '!=',  1];
-     * $where = ['id', 'IN',  [1, 2]];
-     * $where = ['id', 'NOT IN',  [1, 2]];
-     * $where = ['name', 'LIKE',  '%foo%'];
-     * $where = ['name', 'NOT LIKE',  '%foo%'];
-     * $where = ['`price` > IF(`state` = "TX", ?, 100)', 'RAW',  [200]]; // todo ...
-     * $where = [
-     *      ['id' => 1],
-     *      ['name', 'LIKE',  '%foo%'],
-     * ]
+     * $where = ['id' => 1]; <br/>
+     * $where = ['id', '>',  1];<br/>
+     * $where = ['id', '<',  1];<br/>
+     * $where = ['id', '!=',  1];<br/>
+     * $where = ['id', 'IN',  [1, 2]];<br/>
+     * $where = ['id', 'NOT IN',  [1, 2]];<br/>
+     * $where = ['name', 'LIKE',  '%foo%'];<br/>
+     * $where = ['name', 'NOT LIKE',  '%foo%'];<br/>
+     * $where = ['`price` > IF(`state` = "TX", ?, 100)', 'RAW',  [200]]; // todo ...<br/>
+     * $where = [<br/>
+     *      ['id' => 1],<br/>
+     *      ['name', 'LIKE',  '%foo%'],<br/>
+     * ]<br/>
      * </code>
      *
      * @return Builder ...
@@ -230,32 +283,6 @@ abstract class AbstractDBRepository
             }
         }
         return $do;
-    }
-
-    /**
-     * 批量修改 - case...then...根据主键.
-     * @param array $values 修改数据(必须包含ID)
-     * @return int 影响条数
-     */
-    public function batchUpdateByIds(array $values): int
-    {
-        if (empty($values)) {
-            return 0;
-        }
-
-        $do = $this->getDO();
-
-        # ksort
-        foreach ($values as &$value) {
-            ksort($value);
-            $value = $do->columnsFormat($value, true);
-        }
-        $tablePrefix = Db::connection($do->getConnectionName())->getTablePrefix();
-        $table = $do->getTable();
-        $primary = $do->getKeyName();
-        $sql = $this->compileBatchUpdateByIds($tablePrefix . $table, $values, $primary);
-
-        return Db::update($sql);
     }
 
     /**

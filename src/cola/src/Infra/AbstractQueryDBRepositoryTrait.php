@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MaliBoot\Cola\Infra;
@@ -269,6 +270,10 @@ trait AbstractQueryDBRepositoryTrait
         $this->applyCriteria()->applyScope();
 
         $where = $pageQuery->getFilters();
+        $collectionWhere = $this->collectSearchVars($pageQuery);
+        if (! empty($collectionWhere)) {
+            $where = array_merge($collectionWhere, $where);
+        }
         if ($where) {
             $this->do = $this->applyConditions($where);
         }
