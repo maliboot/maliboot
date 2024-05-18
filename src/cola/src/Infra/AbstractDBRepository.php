@@ -99,8 +99,12 @@ abstract class AbstractDBRepository
 
     protected function collectSearchVars(object $classInstance): array
     {
-        $result = [];
         $generatorAnnotationList = AnnotationCollector::get(get_class($classInstance) . '._p');
+        if (empty($generatorAnnotationList)) {
+            return [];
+        }
+
+        $result = [];
         // Search::class
         foreach ($generatorAnnotationList as $generatorFieldName => $generatorAnnotation) {
             if (! isset($generatorAnnotation[Search::class])) {
