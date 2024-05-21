@@ -18,6 +18,12 @@ class BindImplListener extends AbstractListener implements ListenerInterface
     {
         $dependencies = [];
         $namespacePrefix = $this->getNamespacePrefix($plugin::getDir());
+
+        $domainRepoDir = $plugin::getDir() . '/Domain/Repository';
+        if (! is_dir($domainRepoDir)) {
+            return [];
+        }
+
         $finder = new Finder();
         $finder = $finder->files()->in($plugin::getDir() . '/Domain/Repository')->name('*Repo.php');
         foreach ($finder as $file) {
