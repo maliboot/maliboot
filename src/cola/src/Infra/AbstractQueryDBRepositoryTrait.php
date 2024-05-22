@@ -6,6 +6,7 @@ namespace MaliBoot\Cola\Infra;
 
 use Closure;
 use Hyperf\Contract\PaginatorInterface;
+use Hyperf\Stringable\Str;
 use MaliBoot\Cola\Exception\RepositoryException;
 use MaliBoot\Dto\PageVO;
 use MaliBoot\Utils\Collection;
@@ -104,22 +105,28 @@ trait AbstractQueryDBRepositoryTrait
         return $this->parserResult($do);
     }
 
-    public function updateById(array $values): bool
+    public function updateById(array $values, $primaryValue = null, string $primaryKey = 'id'): bool
     {
         $do = $this->getDO();
         $values = $do->columnsFormat($values, true);
-        $primaryKey = $do->getKeyName();
-        if (! isset($values[$primaryKey])) {
-            throw new RepositoryException(500, sprintf(
-                '%s::updateById(array $values)缺失主键[%s]值：%s',
-                $this::class,
-                $primaryKey,
-                json_encode($values)
-            ));
+
+        if (empty($primaryKey)) {
+            $primaryKey = $do->getKeyName();
+            if (! isset($values[$primaryKey])) {
+                throw new RepositoryException(500, sprintf(
+                    '%s::updateById(array $values)缺失主键[%s]值：%s',
+                    $this::class,
+                    $primaryKey,
+                    json_encode($values)
+                ));
+            }
         }
 
-        $primaryValue = $values[$primaryKey];
-        unset($values[$primaryValue]);
+        if (empty($primaryValue)) {
+            $primaryValue = $values[$primaryKey];
+            unset($values[$primaryValue]);
+        }
+
         return (bool) $do->where($primaryKey, $primaryValue)->update($values);
     }
 
@@ -133,6 +140,41 @@ trait AbstractQueryDBRepositoryTrait
         $this->applyCriteria()->applyScope();
 
         $results = $this->do->first($columns);
+
+        $this->reset();
+
+        return $this->parserResult($results);
+    }
+
+    /**
+     * 获取单个值
+     *
+     * @param string $field
+     * @return mixed
+     */
+    public function value(string $field)
+    {
+        $this->applyCriteria()->applyScope();
+
+        $results = $this->do->value(Str::snake($field));
+
+        $this->reset();
+
+        return $this->parserResult($results);
+    }
+
+    /**
+     * 获取一列的值
+     *
+     * @param string $field
+     * @param string|null $key
+     * @return Collection
+     */
+    public function pluck(string $field, ?string $key = null)
+    {
+        $this->applyCriteria()->applyScope();
+
+        $results = $this->do->pluck(Str::snake($field));
 
         $this->reset();
 
@@ -364,20 +406,6 @@ trait AbstractQueryDBRepositoryTrait
         $this->applyCriteria()->applyScope();
 
         return $this->do->lists($column, $key);
-    }
-
-    /**
-     * 查询指定字段的选择数据数组.
-     *
-     * @return array|Collection
-     */
-    public function pluck(string $column, ?string $key = null)
-    {
-        $this->applyCriteria()->applyScope();
-
-        $results = $this->do->pluck($column, $key);
-
-        return $this->parserResult($results);
     }
 
     /**
