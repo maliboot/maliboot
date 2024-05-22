@@ -31,7 +31,7 @@ abstract class AbstractExceptionHandler extends ExceptionHandler
     {
         $errCode = $throwable->getCode();
         $errMessage = $throwable->getMessage();
-        if ($errCode === 0) {
+        if ($errCode === 0 || is_int($errCode)) {
             $errCode = ServerErrorCode::SERVER_ERROR;
         }
 
@@ -53,7 +53,7 @@ abstract class AbstractExceptionHandler extends ExceptionHandler
 
     protected function response($errCode, string $errMessage, \Throwable $throwable, ResponseInterface $response): ResponseInterface
     {
-        $errResponse = SingleResponse::buildFailure($errCode, $errMessage);
+        $errResponse = SingleResponse::buildFailure((int) $errCode, $errMessage);
         if ($this->config->get('app_debug')) {
             $trace = array_reverse(explode("\n", $throwable->getTraceAsString()));
             $debugSql = [];
