@@ -7,6 +7,7 @@ use Hyperf\Di\Aop\ProceedingJoinPoint;
 use MaliBoot\Cola\Annotation\ValueObject;
 use MaliBoot\Dto\Annotation\Context;
 use MaliBoot\Dto\Annotation\DataTransferObject;
+use MaliBoot\Dto\Annotation\Event;
 use MaliBoot\Dto\Annotation\ViewObject;
 
 class InjectAspect extends AbstractAspect
@@ -16,6 +17,7 @@ class InjectAspect extends AbstractAspect
         ValueObject::class,
         Context::class,
         ViewObject::class,
+        Event::class,
     ];
 
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
