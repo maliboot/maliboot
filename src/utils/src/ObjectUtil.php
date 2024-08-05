@@ -59,7 +59,7 @@ class ObjectUtil
         }
 
         $firstItem = $collection->first();
-        if (! (is_string($firstItem) || is_a($firstItem))) {
+        if (! (is_string($firstItem) || is_object($firstItem))) {
             return '';
         }
 
