@@ -25,7 +25,11 @@ class BindImplListener extends AbstractListener implements ListenerInterface
         }
 
         $finder = new Finder();
-        $finder = $finder->files()->in($plugin::getDir() . '/Domain/Repository')->name('*Repo.php');
+        try {
+            $finder = $finder->files()->in($plugin::getDir() . '/Domain/Repository')->name('*Repo.php');
+        }catch (\Exception $e) {
+            return [];
+        }
         foreach ($finder as $file) {
             $repositoryName = $file->getBasename('.php');
             $repositoryImplClassName = sprintf('%sInfra\\Repository\\%sCmdRepo', $namespacePrefix, str_replace('Repo', '', $repositoryName));
@@ -53,7 +57,11 @@ class BindImplListener extends AbstractListener implements ListenerInterface
         $dependencies = [];
         $namespacePrefix = $this->getNamespacePrefix($plugin::getDir());
         $finder = new Finder();
-        $finder = $finder->files()->in($plugin::getDir() . '/Client/Api')->name('*Service.php');
+        try {
+            $finder = $finder->files()->in($plugin::getDir() . '/Client/Api')->name('*Service.php');
+        }catch (\Exception $e) {
+            return [];
+        }
         foreach ($finder as $file) {
             $serviceName = str_replace('Service', '', $file->getBasename('.php'));
             $serviceImplClassName = sprintf('%sAdapter\\Rpc\\%sRpcService', $namespacePrefix, $serviceName);
