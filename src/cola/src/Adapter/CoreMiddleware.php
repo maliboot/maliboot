@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MaliBoot\Cola\Adapter;
 
+use Hyperf\Context\Context;
 use Hyperf\Contract\Arrayable;
 use Hyperf\Contract\Jsonable;
 use Hyperf\Di\Annotation\AnnotationCollector;
@@ -42,6 +43,7 @@ class CoreMiddleware extends \Hyperf\HttpServer\CoreMiddleware
         if (interface_exists(\MaliBoot\ResponseWrapper\Contract\ResponseWrapperInterface::class)) {
             $responseWrapper = make(\MaliBoot\ResponseWrapper\Contract\ResponseWrapperInterface::class);
             $response = $responseWrapper->handle($response, $request);
+            $response instanceof ResponseInterface && Context::set(ResponseInterface::class, $response);
         }
 
         return parent::transferToResponse($response, $request);
