@@ -31,7 +31,7 @@ abstract class AbstractExceptionHandler extends ExceptionHandler
     {
         $errCode = $throwable->getCode();
         $errMessage = $throwable->getMessage();
-        if ($errCode === 0 || is_int($errCode)) {
+        if ($errCode === 0 || !is_int($errCode)) {
             $errCode = ServerErrorCode::SERVER_ERROR;
         }
 
