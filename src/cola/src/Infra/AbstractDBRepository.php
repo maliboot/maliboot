@@ -175,6 +175,8 @@ abstract class AbstractDBRepository
                 }
                 // smooth input
                 $condition = preg_replace('/\s\s+/', ' ', trim($condition));
+                $condition = strtoupper($condition);
+                $conditionSwap = $condition;
 
                 // split to get operator, syntax: "DATE >", "DATE =", "DAY <"
                 $operator = explode(' ', $condition);
@@ -184,6 +186,10 @@ abstract class AbstractDBRepository
                 } else {
                     $operator = null;
                 }
+                if (!in_array($condition, [QueryConnector::DATE, QueryConnector::DAY, QueryConnector::MONTH, QueryConnector::YEAR])) {
+                    $condition = $conditionSwap;
+                }
+
                 switch (QueryConnector::from(strtoupper($condition))) {
                     case QueryConnector::IN:
                         if (! is_array($val)) {
